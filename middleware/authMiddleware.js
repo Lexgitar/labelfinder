@@ -62,6 +62,7 @@ const checkRole = (req, res, next)=>{
                 // res.locals.user = user;
                 if(req.baseUrl === `/api/${user.role}s` ){
                     console.log('CHECKED');
+                    req.userId = user._id;
                     next();
                 }
                 // next()

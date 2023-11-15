@@ -4,17 +4,28 @@ const labels_get = (req, res, next) =>{
     res.send('all labels');
     };
 
-const labels_getById = (req, res, next)=>{
-    res.send('labels by id')
+const labels_getById = async (req, res, next)=>{
+    const id = req.params.id
+    const label = await Label.findOne({_id : id});
+    res.send(label);
 }
 
-const labels_put = (req, res, next)=>{
-    res.send('labels put')
+const labels_put = async (req, res, next)=>{
+    const id = req.params.id
+    const {name} = req.body
+    Label.findOneAndUpdate({_id : id}, {name}).then(function(){
+        Label.findOne({_id: id}).then(function(label){
+            res.send(label)
+        })
+    });
+   
 }
 
 const labels_post = async (req, res, next)=>{
     const {name, location} = req.body;
+    const userId = req.userId;
     const newLabel = await Label.create({
+        userId,
         name,
         location
     })

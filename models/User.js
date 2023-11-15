@@ -18,13 +18,13 @@ const UserSchema = new mongoose.Schema({
     role:{
         type: String,
         required:[true, 'Please define role'],
-        enum: ['label', 'band'],
+        enum: ['label', 'band', 'fan'],
         description: 'Must choose between label and band'
     },
 });
 
 //before doc saved
-UserSchema.pre('save',async function(next){
+UserSchema.pre('save', async function(next){
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt)
     next()

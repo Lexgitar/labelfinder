@@ -14,7 +14,9 @@ const bands_put = (req, res, next)=>{
 
 const bands_post = async (req, res, next)=>{
     const {name, location} = req.body;
+    const userId = req.userId;
     const newBand = await Band.create({
+        userId,
         name,
         location
     })
