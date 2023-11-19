@@ -19,8 +19,15 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required:[true, 'Please define role'],
         enum: ['label', 'band', 'fan'],
-        description: 'Must choose between label and band'
+        description: 'Must choose between label, band or fan'
     },
+    inited:{
+        type: Boolean
+    },
+    itemId:{
+        type: String
+    }
+    
 });
 
 //before doc saved

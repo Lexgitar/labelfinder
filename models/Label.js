@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
+const {userInited} = require('../middleware/authMiddleware')
 
 const Schema = mongoose.Schema;
 const LabelSchema = new Schema({
     userId:{
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     name: {
         type: String,
@@ -23,5 +25,7 @@ const LabelSchema = new Schema({
         default: Date.now
       }
 })
+
+
 
 module.exports = mongoose.model('Label', LabelSchema);

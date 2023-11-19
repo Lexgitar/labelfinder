@@ -4,11 +4,13 @@ const Schema = mongoose.Schema;
 const BandSchema = new Schema({
     userId:{
         type: String,
-        required: true
+        required: true,
+        unique: true
       },
     name: {
         type: String,
-        required: true
+        required: true,
+       // unique: true
       },
       location: {
         type: String,

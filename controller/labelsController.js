@@ -1,8 +1,12 @@
 const Label = require ('../models/Label')
+const {handleDocErrors} = require('../controller/authController')
 
-const labels_get = (req, res, next) =>{
-    res.send('all labels');
-    };
+const labels_get = async (req, res, next) =>{
+    Label.find().then(function(label){
+        res.send(label)
+    })
+
+};
 
 const labels_getById = async (req, res, next)=>{
     const id = req.params.id
@@ -24,16 +28,27 @@ const labels_put = async (req, res, next)=>{
 const labels_post = async (req, res, next)=>{
     const {name, location} = req.body;
     const userId = req.userId;
-    const newLabel = await Label.create({
+
+    
+    try{
+        const newLabel = await Label.create({
         userId,
         name,
         location
     })
     res.send(newLabel);
+    }catch(err){
+       const errors = handleDocErrors(err)
+       console.log(errors)
+       res.send(errors + ' haha')
+    }
 }
 
-const labels_delete = (req, res, next)=>{
-    res.send('labels delete')
+const labels_delete = async(req, res, next)=>{
+    const {id} = req.params
+    Label.deleteOne({_id:id}).then(function(label){
+        res.send(label)
+    })
 }
     
     module.exports = {

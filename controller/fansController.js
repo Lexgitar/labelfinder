@@ -24,16 +24,30 @@ const fans_put = async (req, res, next)=>{
 const fans_post = async (req, res, next)=>{
     const {name, location} = req.body;
     const userId = req.userId;
-    const newFan = await Fan.create({
-        userId,
-        name,
-        location
-    })
-    res.send(newFan);
+    const findItem = await Fan.findOne({userId})
+   
+       try{
+        const newFan = await Fan.create({
+            userId,
+            name,
+            location
+        })
+    
+        res.send(newFan);
+
+       }catch(err){
+        
+        const errors = handleDocErrors(err)
+        console.log(errors)
+        res.send(errors + ' haha')
+
+       }
 }
 
-const fans_delete = (req, res, next)=>{
-    res.send('fans delete')
+const fans_delete = async (req, res, next)=>{
+        const {id} = req.params
+        const deletedFan = await Fan.deleteOne({_id :id})
+        res.send('deleted ')
 }
     
     module.exports = {

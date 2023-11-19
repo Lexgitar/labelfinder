@@ -46,14 +46,14 @@ const checkUser = (req, res, next)=>{
 
 // check role
 
-const checkRole = (req, res, next)=>{
+const checkAuthAndRole = (req, res, next)=>{
     const token = req.cookies.jwt;
     if(token){
         jwt.verify(token, jwtSecret, async (err, decodedToken) => {
             if(err){
                 console.log(err.message)
                 // res.locals.user = null;
-                //next();
+                next();
             }else{
                 console.log(decodedToken)
                 let user = await User.findById(decodedToken.id)
@@ -63,6 +63,8 @@ const checkRole = (req, res, next)=>{
                 if(req.baseUrl === `/api/${user.role}s` ){
                     console.log('CHECKED');
                     req.userId = user._id;
+                   
+                    
                     next();
                 }
                 // next()
@@ -73,4 +75,6 @@ const checkRole = (req, res, next)=>{
     }
 }
 
-module.exports = { requireAuth, checkUser, checkRole};
+
+
+module.exports = { requireAuth, checkUser, checkAuthAndRole};

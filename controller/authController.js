@@ -5,15 +5,15 @@ const jwt = require('jsonwebtoken');
 const handleErrors = (err) => {
     console.log(err.message, err.code);
     let errors = { email: '', password: '' };
-  
+    let errString = ' incorrect credentials'
     //incorrect email
     if(err.message === 'incorrect email'){
-      errors.email = ' that meial not regd'
+      errors.email = errString
     }
   
     //incorrect password
     if(err.message === 'incorrect password'){
-      errors.password = ' that password not regd'
+      errors.password = errString
     }
   
     // duplicate email error
@@ -34,6 +34,43 @@ const handleErrors = (err) => {
   
     return errors;
   }
+//
+//DOC (fan, label, band) errors
+const handleDocErrors = (err) => {
+  
+  // console.log(Object.values(err.message), err.code);
+  // let errors = { email: '', password: '' };
+  // let errString = ' incorrect credentials'
+  // //incorrect email
+  // if(err.message === 'incorrect email'){
+  //   errors.email = errString
+  // }
+
+  // //incorrect password
+  // if(err.message === 'incorrect password'){
+  //   errors.password = errString
+  // }
+
+  // // duplicate email error
+  if (err.code === 11000) {
+    errors = 'duplicate item';
+    return errors;
+  }
+
+  // // validation errors
+  // if (err.message.includes('user validation failed')) {
+  //   // console.log(err);
+  //   Object.values(err.errors).forEach(({ properties }) => {
+  //     // console.log(val);
+  //     // console.log(properties);
+  //     errors[properties.path] = properties.message;
+  //   });
+  //}
+
+  //return errors;
+}
+
+
 //
 const maxAge = 3*24*60*60;
 const createToken=(id)=>{
@@ -78,12 +115,13 @@ const login_post = async (req, res) => {
 const logout_get = (req, res)=>{
     res.cookie('jwt', '', {maxAge: 1});
     res.send('OUT');
-    res.redirect('/');
+   // res.redirect('/');
   }
 //
 
 module.exports = {
     //signup_get,
+    handleDocErrors,
     signup_post,
     login_post,
     logout_get

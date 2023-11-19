@@ -1,31 +1,69 @@
 const Band = require('../models/Band')
+const {handleDocErrors} = require('../controller/authController')
 
-const bands_get = (req, res, next) =>{
-res.send('all bands');
+const bands_get = async (req, res, next) =>{
+    Band.find().then(function(bands){
+        res.send(bands)
+    })
+
 };
 
-const bands_getById = (req, res, next)=>{
-    res.send('bands by id')
+const bands_getById = async (req, res, next)=>{
+    const {id} = req.params
+    Band.findOne({_id:id}).then(function(band){
+        res.send(band)
+    })
 }
 
-const bands_put = (req, res, next)=>{
-    res.send('bands put - by id obviously ')
-}
+const bands_put = async  (req, res, next)=>{
+    const id = req.params.id;
+    const {name, location} = req.body;
+    console.log(name)
+    // const updatedBand = await Band.findByIdAndUpdate({_id:id}, {name, location});
+    // res.send(updatedBand);
+    Band.findOneAndUpdate({_id:id}, {name, location }).then(function(){
+        Band.findOne({ _id:id}).then(function(band){
+            res.send(band)
+        })
+    });
 
+
+    // const found = await Band.findOne({_id:id})
+    // res.send(found);
+
+}
+//make new band  + check only 1 item/user
 const bands_post = async (req, res, next)=>{
     const {name, location} = req.body;
     const userId = req.userId;
-    const newBand = await Band.create({
-        userId,
-        name,
-        location
-    })
+    const findItem = await Band.findOne({userId})
+   
+       try{
+        const newBand = await Band.create({
+            userId,
+            name,
+            location
+        })
+    
+        res.send(newBand);
 
-    res.send(newBand);
-}
+       }catch(err){
+        
+        const errors = handleDocErrors(err)
+        console.log(errors)
+        res.send(errors + ' haha')
 
-const bands_delete = (req, res, next)=>{
-    res.send('bands delete')
+       }
+            
+       
+        
+    }
+
+//delete by id
+const bands_delete = async (req, res, next)=>{
+    const {id} = req.params
+    const deletedBand = await Band.deleteOne({_id :id})
+    res.send(deletedBand)
 }
     
     module.exports = {
