@@ -28,23 +28,30 @@ const labels_put = async (req, res, next)=>{
 const labels_post = async (req, res, next)=>{
     const {name, location} = req.body;
     const userId = req.userId;
-
-    
-    try{
-        const newLabel = await Label.create({
-        userId,
-        name,
-        location
-    })
-    res.send(newLabel);
-    }catch(err){
-       const errors = handleDocErrors(err)
-       console.log(errors)
-       res.send(errors + ' haha')
-    }
+    const findItem = await Label.findOne({userId})
+   
+    if(!findItem){
+        try{
+         const newLabel = await Label.create({
+             userId,
+             name,
+             location
+         })
+     
+         res.send(newLabel);
+ 
+        }catch(err){
+         
+         const errors = handleDocErrors(err)
+         console.log(errors)
+         res.send(errors + ' haha')
+ 
+        }}else{
+         res.send('Cannot set up more than 1 profile')
+        }
 }
 
-const labels_delete = async(req, res, next)=>{
+const labels_delete = async (req, res, next)=>{
     const {id} = req.params
     Label.deleteOne({_id:id}).then(function(label){
         res.send(label)

@@ -26,22 +26,25 @@ const fans_post = async (req, res, next)=>{
     const userId = req.userId;
     const findItem = await Fan.findOne({userId})
    
-       try{
-        const newFan = await Fan.create({
-            userId,
-            name,
-            location
-        })
-    
-        res.send(newFan);
-
-       }catch(err){
-        
-        const errors = handleDocErrors(err)
-        console.log(errors)
-        res.send(errors + ' haha')
-
-       }
+    if(!findItem){
+        try{
+         const newFan = await Fan.create({
+             userId,
+             name,
+             location
+         })
+     
+         res.send(newFan);
+ 
+        }catch(err){
+         
+         const errors = handleDocErrors(err)
+         console.log(errors)
+         res.send(errors + ' haha')
+ 
+        }}else{
+         res.send('Cannot set up more than 1 profile')
+        }
 }
 
 const fans_delete = async (req, res, next)=>{

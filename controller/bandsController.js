@@ -37,7 +37,7 @@ const bands_post = async (req, res, next)=>{
     const {name, location} = req.body;
     const userId = req.userId;
     const findItem = await Band.findOne({userId})
-   
+    if(!findItem){
        try{
         const newBand = await Band.create({
             userId,
@@ -53,10 +53,9 @@ const bands_post = async (req, res, next)=>{
         console.log(errors)
         res.send(errors + ' haha')
 
-       }
-            
-       
-        
+       }}else{
+        res.send('Cannot set up more than 1 profile')
+       }    
     }
 
 //delete by id
