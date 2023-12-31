@@ -22,6 +22,9 @@ const FanSchema = new Schema({
     updatedAt: {
         type: Date,
         default: Date.now
+      },
+      attachedId:{
+        type: String
       }
 })
 

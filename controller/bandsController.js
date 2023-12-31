@@ -43,7 +43,7 @@ const bands_post = async (req, res, next)=>{
             userId,
             name,
             location,
-            inited:true
+            
         })
     
         res.send(newBand);

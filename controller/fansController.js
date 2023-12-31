@@ -1,7 +1,9 @@
 const Fan = require ('../models/Fan')
 
 const fans_get = (req, res, next) =>{
-    res.send('all fans');
+    Fan.find().then(function(fans){
+        res.send(fans)
+    })
     };
 
 const fans_getById = async (req, res, next)=>{

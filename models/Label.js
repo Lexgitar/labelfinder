@@ -23,7 +23,10 @@ const LabelSchema = new Schema({
     updatedAt: {
         type: Date,
         default: Date.now
-      }
+      },
+      attachedId:{
+        type: String
+    }
 })
 
 
