@@ -42,7 +42,8 @@ const bands_post = async (req, res, next)=>{
         const newBand = await Band.create({
             userId,
             name,
-            location
+            location,
+            inited:true
         })
     
         res.send(newBand);

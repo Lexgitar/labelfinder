@@ -23,4 +23,4 @@ mongoose.connect(dbURI)
   }))
   .catch((err) => console.log('alex', err));
 
-  console.log(dbURI);
+  //console.log(dbURI);
