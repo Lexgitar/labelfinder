@@ -14,8 +14,8 @@ const fans_getById = async (req, res, next)=>{
 
 const fans_put = async (req, res, next)=>{
     const id = req.params.id
-    const {name} = req.body
-    Fan.findOneAndUpdate({_id : id}, {name}).then(function(){
+    const {name,location} = req.body
+    Fan.findOneAndUpdate({_id : id}, {name, location}).then(function(){
         Fan.findOne({_id: id}).then(function(fan){
             res.send(fan)
         })

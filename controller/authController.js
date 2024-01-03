@@ -107,7 +107,7 @@ const login_post = async (req, res) => {
       const token = createToken(user._id);
       
       res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
-      res.status(200).json({user})
+      res.status(200).json({email: user.email, _id : user._id, role: user.role})
     } catch (error) {
       const errors = handleErrors(error)
       res.status(400).json({errors})
