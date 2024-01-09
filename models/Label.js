@@ -25,7 +25,7 @@ const LabelSchema = new Schema({
         default: Date.now
       },
       attachedId:{
-        type: String
+        type: []
     }
 })
 

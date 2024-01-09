@@ -25,7 +25,7 @@ const BandSchema = new Schema({
         default: Date.now
       },
       attachedId:{
-        type: String
+        type: []
       }
 })
 

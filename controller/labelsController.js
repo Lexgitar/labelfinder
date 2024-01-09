@@ -16,8 +16,8 @@ const labels_getById = async (req, res, next)=>{
 
 const labels_put = async (req, res, next)=>{
     const id = req.params.id
-    const {name} = req.body
-    Label.findOneAndUpdate({_id : id}, {name}).then(function(){
+    const {name, location} = req.body
+    Label.findOneAndUpdate({_id : id}, {name, location}).then(function(){
         Label.findOne({_id: id}).then(function(label){
             res.send(label)
         })
