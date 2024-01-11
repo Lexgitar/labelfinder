@@ -15,7 +15,8 @@ const labels_getById = async (req, res, next)=>{
 }
 
 const labels_put = async (req, res, next)=>{
-    const id = req.params.id
+   
+        const id = req.params.id
     const {name, location} = req.body
     Label.findOneAndUpdate({_id : id}, {name, location}).then(function(){
         Label.findOne({_id: id}).then(function(label){
@@ -23,6 +24,34 @@ const labels_put = async (req, res, next)=>{
         })
     });
    
+}
+
+const labels_put_query = async (req, res, next)=>{
+     if(req.query){
+        const id = req.params.id
+        const attachedId = req.query.attach
+        const includedId = false
+
+        Label.findOne({_id:id}).then(function(label){
+           if (label.attachedId.includes(attachedId)){
+            res.send('already in')
+           }else{
+
+            Label.updateOne({_id : id}, {$push:{attachedId:attachedId}}).then(function(){
+                Label.findOne({_id: id}).then(function(label){
+                    console.log('clog',req.query.attach, req.params.id)
+                    
+                    res.send(label.attachedId)
+                })
+            });
+           }
+        })
+       
+        
+        
+    
+    }
+    
 }
 
 const labels_post = async (req, res, next)=>{
@@ -62,6 +91,7 @@ const labels_delete = async (req, res, next)=>{
         labels_get,
         labels_getById,
         labels_put,
+        labels_put_query,
         labels_post,
         labels_delete,
         
