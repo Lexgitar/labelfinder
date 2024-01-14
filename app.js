@@ -19,8 +19,8 @@ app.use('/api', apiRouter);
 // });
 mongoose.connect(dbURI)
   .then((result) => app.listen(PORT, ()=>{
-    console.log('alex listening');
+    console.log('@ listening');
   }))
-  .catch((err) => console.log('alex', err));
+  .catch((err) => console.log('@ error', err));
 
   //console.log(dbURI);

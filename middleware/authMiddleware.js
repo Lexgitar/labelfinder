@@ -11,14 +11,14 @@ const requireAuth = (req, res, next)=>{
         jwt.verify(token, jwtSecret, (err, decodedToken) => {
             if(err){
                 console.log(err.message)
-                res.send('require auth error')
+                res.send('require auth - error')
             }else{
                 console.log(decodedToken)
                 next()
             }
         })
     }else{
-        res.send('require auth error')
+        res.send('require auth - error')
     }
 }
 
@@ -40,7 +40,7 @@ const checkUser = (req, res, next)=>{
         })
     }else{
         // res.locals.user = null
-        next()
+        res.send('error!! checkuser')
     }
 }
 

@@ -27,7 +27,7 @@ const labels_put = async (req, res, next)=>{
 }
 
 const labels_put_query = async (req, res, next)=>{
-     if(req.query){
+     if(req.query.attach){
         const id = req.params.id
         const attachedId = req.query.attach
         const includedId = false
@@ -50,6 +50,8 @@ const labels_put_query = async (req, res, next)=>{
         
         
     
+    }else{
+        next()
     }
     
 }
