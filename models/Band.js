@@ -24,9 +24,7 @@ const BandSchema = new Schema({
         type: Date,
         default: Date.now
       },
-      attachedId:{
-        type: []
-      }
+      attachedId:[]
 })
 
 module.exports = mongoose.model('Band', BandSchema);

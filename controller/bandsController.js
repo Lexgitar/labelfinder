@@ -26,12 +26,38 @@ const bands_put = async  (req, res, next)=>{
             res.send(band)
         })
     });
-
-
-    // const found = await Band.findOne({_id:id})
-    // res.send(found);
-
 }
+
+const bands_put_query = async (req, res, next)=>{
+    if(req.query.attach){
+       const id = req.params.id
+       const attachedId = req.query.attach
+       const includedId = false
+
+       Band.findOne({_id:id}).then(function(band){
+          if (band.attachedId.includes(attachedId)){
+           res.send('already in')
+          }else{
+
+           Band.updateOne({_id : id}, {$push:{attachedId:attachedId}}).then(function(){
+               Band.findOne({_id: id}).then(function(band){
+                   console.log('clog',req.query.attach, req.params.id)
+                   
+                   res.send(band.attachedId)
+               })
+           });
+          }
+       })
+      
+       
+       
+   
+   }else{
+       next()
+   }
+   
+}
+
 //make new band  + check only 1 item/user
 const bands_post = async (req, res, next)=>{
     const {name, location} = req.body;
@@ -70,6 +96,7 @@ const bands_delete = async (req, res, next)=>{
         bands_get,
         bands_getById,
         bands_put,
+        bands_put_query,
         bands_post,
         bands_delete,
         
