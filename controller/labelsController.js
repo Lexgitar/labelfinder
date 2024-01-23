@@ -31,7 +31,6 @@ const labels_put_query = async (req, res, next) => {
     if (req.query.attach) {
 
         const attachedId = req.query.attach
-        const includedId = false
 
         Label.findOne({ _id: id }).then(function (label) {
             if (label.attachedId.includes(attachedId)) {
@@ -51,22 +50,23 @@ const labels_put_query = async (req, res, next) => {
     } else if (req.query.detach) {
         const idToDetach = req.query.detach
 
-        Label.findOne({ _id: id }).then(function (label){
+        Label.findOne({ _id: id }).then(function (label) {
             if (label.attachedId.includes(idToDetach)) {
                 Label.updateOne({ _id: id }, { $pull: { attachedId: idToDetach } }).then(function () {
                     Label.findOne({ _id: id }).then(function (label) {
                         console.log('clogdetach', idToDetach, req.params.id)
-        
+
                         res.send(label.attachedId)
-                       
+
                     })
                 });
-                
+
             } else {
 
                 res.send('detach id  not in')
 
-    }})
+            }
+        })
 
     } else {
         next()

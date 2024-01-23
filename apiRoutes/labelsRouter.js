@@ -1,6 +1,6 @@
 const labelsRouter = require('express').Router();
 const labelsController = require('../controller/labelsController')
-const { checkAuthAndRole, requireAuth, requireAuthNRole } = require('../middleware/authMiddleware')
+const { checkAuthAndRole, requireAuth } = require('../middleware/authMiddleware')
 
 
 //

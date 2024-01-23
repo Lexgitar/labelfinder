@@ -1,4 +1,5 @@
 const Fan = require ('../models/Fan')
+const {handleDocErrors} = require('../controller/authController')
 
 const fans_get = (req, res, next) =>{
     Fan.find().then(function(fans){
@@ -42,10 +43,10 @@ const fans_post = async (req, res, next)=>{
          
          const errors = handleDocErrors(err)
          console.log(errors)
-         res.send(errors + ' haha')
+         res.status(400).json(errors)
  
         }}else{
-         res.send('Cannot set up more than 1 profile')
+         res.status(400).json('Cannot set up more than 1 profile')
         }
 }
 
