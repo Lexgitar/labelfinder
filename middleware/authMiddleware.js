@@ -2,7 +2,11 @@ const jwt = require('jsonwebtoken');
 const jwtSecret = process.env.JWT_SECRET;
 const User = require('../models/User');
 //
+const Label = require('../models/Label')
+const Band = require('../models/Band')
 
+//
+//
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt;
 
@@ -38,7 +42,7 @@ const requireAuthNRole = (req, res, next) => {
                 if (req.baseUrl !== `/api/${user.role}s`) {
 
                     next();
-                }else{
+                } else {
                     res.send(err.message)
                 }
             }
@@ -100,6 +104,23 @@ const checkAuthAndRole = (req, res, next) => {
     }
 }
 
+const validateId = async (req, res, next) => {
+    const roleByUrl = req.originalUrl.includes('labels') ? Label : Band
+    
+    const { id } = req.params
+    const role = await roleByUrl.findOne({ _id: id })
 
+    try {
+        if(role){
+            
+            next()
+        }else{
+            throw new Error('Invalid resource')
+        }
+    } catch (error) {
+        res.status(400).json(error.message)
+        
+    }
+}
 
-module.exports = { requireAuth, checkUser, checkAuthAndRole, requireAuthNRole };
+module.exports = { requireAuth, checkUser, checkAuthAndRole, requireAuthNRole, validateId };

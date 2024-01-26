@@ -18,7 +18,7 @@ const bands_getById = async (req, res, next) => {
 const bands_put = async (req, res, next) => {
     const id = req.params.id;
     const { name, location } = req.body;
-    console.log(name)
+    // console.log(name)
 
     try {
         if (name && location) {
@@ -32,7 +32,7 @@ const bands_put = async (req, res, next) => {
         }
 
     } catch (err) {
-       
+
         res.status(400).json(err.message)
     }
 
@@ -40,14 +40,13 @@ const bands_put = async (req, res, next) => {
 }
 
 const bands_put_query = async (req, res, next) => {
+    const id = req.params.id
     if (req.query.attach) {
-        const id = req.params.id
         const attachedId = req.query.attach
-        const includedId = false
 
         Band.findOne({ _id: id }).then(function (band) {
             if (band.attachedId.includes(attachedId)) {
-                res.send('already in')
+                res.status(400).json('Already attached')
             } else {
 
                 Band.updateOne({ _id: id }, { $push: { attachedId: attachedId } }).then(function () {

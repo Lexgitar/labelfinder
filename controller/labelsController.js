@@ -18,58 +18,70 @@ const labels_put = async (req, res, next) => {
 
     const id = req.params.id
     const { name, location } = req.body
-    Label.findOneAndUpdate({ _id: id }, { name, location }).then(function () {
-        Label.findOne({ _id: id }).then(function (label) {
-            res.send(label)
-        })
-    });
+
+    try {
+        if (name && location) {
+            Label.findOneAndUpdate({ _id: id }, { name, location }).then(function () {
+                Label.findOne({ _id: id }).then(function (label) {
+                    res.send(label)
+                })
+            });
+        } else {
+            throw new Error('All fields required')
+        }
+
+    } catch (err) {
+
+        res.status(400).json(err.message)
+    }
+
 
 }
 
 const labels_put_query = async (req, res, next) => {
     const id = req.params.id
-    if (req.query.attach) {
+    try {
+        if (id && req.query.attach) {
 
-        const attachedId = req.query.attach
+            const attachedId = req.query.attach
 
-        Label.findOne({ _id: id }).then(function (label) {
-            if (label.attachedId.includes(attachedId)) {
-                res.send('already in')
-            } else {
+            Label.findOne({ _id: id }).then(function (label) {
+                if (label.attachedId.includes(attachedId)) {
+                    res.status(400).json('Already attached')
 
-                Label.updateOne({ _id: id }, { $push: { attachedId: attachedId } }).then(function () {
-                    Label.findOne({ _id: id }).then(function (label) {
-                        console.log('clog', req.query.attach, req.params.id)
+                } else {
 
-                        res.send(label.attachedId)
-                    })
-                });
-            }
-        })
+                    Label.updateOne({ _id: id }, { $push: { attachedId: attachedId } }).then(function () {
+                        Label.findOne({ _id: id }).then(function (label) {
+                            console.log('clog', req.query.attach, req.params.id)
 
-    } else if (req.query.detach) {
-        const idToDetach = req.query.detach
+                            res.send(label.attachedId)
+                        })
+                    });
+                }
+            })
 
-        Label.findOne({ _id: id }).then(function (label) {
-            if (label.attachedId.includes(idToDetach)) {
-                Label.updateOne({ _id: id }, { $pull: { attachedId: idToDetach } }).then(function () {
-                    Label.findOne({ _id: id }).then(function (label) {
-                        console.log('clogdetach', idToDetach, req.params.id)
+        } else if (id && req.query.detach) {
+            const idToDetach = req.query.detach
 
-                        res.send(label.attachedId)
+            Label.findOne({ _id: id }).then(function (label) {
+                if (label.attachedId.includes(idToDetach)) {
+                    Label.updateOne({ _id: id }, { $pull: { attachedId: idToDetach } }).then(function () {
+                        Label.findOne({ _id: id }).then(function (label) {
+                            console.log('clogdetach', idToDetach, req.params.id)
 
-                    })
-                });
+                            res.send(label.attachedId)
 
-            } else {
+                        })
+                    });
+                }
+            })
+        } else {
+            next()
+        }
 
-                res.send('detach id  not in')
-
-            }
-        })
-
-    } else {
-        next()
+    } catch (err) {
+        res.status(400).json(err.message)
     }
 
 }
