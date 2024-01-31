@@ -21,7 +21,7 @@ const handleErrors = (err) => {
 
   // duplicate email error
   if (err.code === 11000) {
-    errors = 'that email is already registered';
+    errors = 'Email is already registered';
     return errors;
   }
 
@@ -106,11 +106,34 @@ const logout_get = (req, res) => {
 }
 //
 
+const user_delete = async (req, res, next) => {
+  console.log('req.id', req.query.id)
+  const id = req.query.id
+  const deletePayload = await User.deleteOne({ _id: id })
+  try {
+    if (deletePayload.deletedCount === 1) {
+      res.cookie('jwt', '', { maxAge: 1 });
+      res.send(`User ${id} deleted`)
+
+
+    } else if (deletePayload.deletedCount === 0) {
+      res.send('Attempt not succesful')
+    } else {
+      throw new Error('Delete unsuccesful')
+    }
+  } catch (err) {
+
+    res.status(400).json(err.message)
+  }
+}
+
+
 module.exports = {
   //signup_get,
   handleDocErrors,
   signup_post,
   login_post,
-  logout_get
+  logout_get,
+  user_delete
 
 };

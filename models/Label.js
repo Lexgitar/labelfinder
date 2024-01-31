@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { userInited } = require('../middleware/authMiddleware')
+//const { userInited } = require('../middleware/authMiddleware')
 
 const Schema = mongoose.Schema;
 const LabelSchema = new Schema({
@@ -15,6 +15,10 @@ const LabelSchema = new Schema({
   location: {
     type: String,
     required: true
+  },
+  genre: {
+    type: String,
+    
   },
   createdAt: {
     type: Date,

@@ -16,6 +16,10 @@ const BandSchema = new Schema({
         type: String,
         required: true
       },
+      genre: {
+        type: String,
+        
+      },
       createdAt: {
         type: Date,
         default: Date.now

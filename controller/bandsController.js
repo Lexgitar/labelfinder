@@ -2,9 +2,15 @@ const Band = require('../models/Band')
 const { handleDocErrors } = require('../controller/authController')
 
 const bands_get = async (req, res, next) => {
-    Band.find().then(function (bands) {
-        res.send(bands)
-    })
+    const bands = await Band.find()
+    try {
+        if (bands) {
+            res.send(bands)
+        }
+    } catch (error) {
+        res.status(400).json(error.message)
+    }
+
 
 };
 
@@ -41,29 +47,48 @@ const bands_put = async (req, res, next) => {
 
 const bands_put_query = async (req, res, next) => {
     const id = req.params.id
-    if (req.query.attach) {
-        const attachedId = req.query.attach
+    try {
+        if (id && req.query.attach) {
 
-        Band.findOne({ _id: id }).then(function (band) {
-            if (band.attachedId.includes(attachedId)) {
-                res.status(400).json('Already attached')
-            } else {
+            const attachedId = req.query.attach
 
-                Band.updateOne({ _id: id }, { $push: { attachedId: attachedId } }).then(function () {
-                    Band.findOne({ _id: id }).then(function (band) {
-                        console.log('clog', req.query.attach, req.params.id)
+            Band.findOne({ _id: id }).then(function (band) {
+                if (band.attachedId.includes(attachedId)) {
+                    res.status(400).json('Already attached')
 
-                        res.send(band.attachedId)
-                    })
-                });
-            }
-        })
+                } else {
 
+                    Band.updateOne({ _id: id }, { $push: { attachedId: attachedId } }).then(function () {
+                        Band.findOne({ _id: id }).then(function (band) {
+                            console.log('clog', req.query.attach, req.params.id)
 
+                            res.send(band.attachedId)
+                        })
+                    });
+                }
+            })
 
+        } else if (id && req.query.detach) {
+            const idToDetach = req.query.detach
 
-    } else {
-        next()
+            Band.findOne({ _id: id }).then(function (band) {
+                if (band.attachedId.includes(idToDetach)) {
+                    Band.updateOne({ _id: id }, { $pull: { attachedId: idToDetach } }).then(function () {
+                        Band.findOne({ _id: id }).then(function (band) {
+                            console.log('clogdetach', idToDetach, req.params.id)
+
+                            res.send(band.attachedId)
+
+                        })
+                    });
+                }
+            })
+        } else {
+            next()
+        }
+
+    } catch (err) {
+        res.status(400).json(err.message)
     }
 
 }
@@ -99,8 +124,19 @@ const bands_post = async (req, res, next) => {
 //delete by id
 const bands_delete = async (req, res, next) => {
     const { id } = req.params
-    const deletedBand = await Band.deleteOne({ _id: id })
-    res.send(deletedBand)
+    const deletePayload = await Band.deleteOne({ _id: id })
+    try {
+        if (deletePayload.deletedCount === 1) {
+            res.send('User-role-details deleted')
+        } else if (deletePayload.deletedCount === 0) {
+            res.send('Attempt not succesful')
+        } else {
+            throw new Error('Delete unsuccesful')
+        }
+    } catch (err) {
+
+        res.status(400).json(err.message)
+    }
 }
 
 module.exports = {

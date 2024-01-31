@@ -2,9 +2,14 @@ const Label = require('../models/Label')
 const { handleDocErrors } = require('../controller/authController')
 
 const labels_get = async (req, res, next) => {
-    Label.find().then(function (label) {
-        res.send(label)
-    })
+    const labels = await Label.find()
+      try {
+        if(labels){
+            res.send(labels)
+        }
+      } catch (error) {
+        res.status(400).json(error.message)
+      }
 
 };
 
@@ -105,7 +110,7 @@ const labels_post = async (req, res, next) => {
 
             const errors = handleDocErrors(err)
             console.log(errors)
-            res.send(errors + ' haha')
+            res.status(400).json(errors.message)
 
         }
     } else {
@@ -115,9 +120,19 @@ const labels_post = async (req, res, next) => {
 
 const labels_delete = async (req, res, next) => {
     const { id } = req.params
-    Label.deleteOne({ _id: id }).then(function (label) {
-        res.send(label)
-    })
+    const deletePayload = await Label.deleteOne({ _id: id })
+    try {
+        if (deletePayload.deletedCount === 1) {
+            res.send('User-role-details deleted')
+        } else if (deletePayload.deletedCount === 0) {
+            res.send('Attempt not succesful')
+        } else {
+            throw new Error('Delete unsuccesful')
+        }
+    } catch (err) {
+
+        res.status(400).json(err.message)
+    }
 }
 
 module.exports = {
