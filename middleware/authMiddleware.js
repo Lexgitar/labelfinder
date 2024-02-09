@@ -82,16 +82,16 @@ const userCheck = (req, res, next) => {
         if (token) {
             jwt.verify(token, jwtSecret, async (err, decodedToken) => {
                 if (err) {
-                    throw new Error (err.message)
+                    throw new Error(err.message)
                 } else {
                     console.log(decodedToken)
                     let user = await User.findById(decodedToken.id)
-                    if (user){
+                    if (user) {
                         req.query.id = user._id
                         next()
                     }
                 }
-                   
+
             })
         }
     } catch (error) {
@@ -105,6 +105,7 @@ const userCheck = (req, res, next) => {
 
 const checkAuthAndRole = (req, res, next) => {
     const token = req.cookies.jwt;
+    console.log('validate-chauthnrol', req.query.clear)
     if (token) {
         jwt.verify(token, jwtSecret, async (err, decodedToken) => {
             if (err) {
@@ -135,8 +136,9 @@ const validateId = async (req, res, next) => {
     const roleByUrl = req.originalUrl.includes('labels') ? Label : Band
 
     const { id } = req.params
+    req.query.clear = id
     const role = await roleByUrl.findOne({ _id: id })
-
+    console.log('validate', req.query.clear)
     try {
         if (role) {
 

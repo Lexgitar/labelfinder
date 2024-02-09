@@ -6,6 +6,7 @@ const { checkAuthAndRole, requireAuth, validateId } = require('../middleware/aut
 //
 
 labelsRouter.get('/', labelsController.labels_get)
+labelsRouter.get('/clear', labelsController.labels_clear)
 labelsRouter.get('/:id', validateId, labelsController.labels_getById)
 labelsRouter.post('/', checkAuthAndRole, labelsController.labels_post)
 //could also add auth-band

@@ -3,13 +3,13 @@ const { handleDocErrors } = require('../controller/authController')
 
 const labels_get = async (req, res, next) => {
     const labels = await Label.find()
-      try {
-        if(labels){
+    try {
+        if (labels) {
             res.send(labels)
         }
-      } catch (error) {
+    } catch (error) {
         res.status(400).json(error.message)
-      }
+    }
 
 };
 
@@ -135,6 +135,24 @@ const labels_delete = async (req, res, next) => {
     }
 }
 
+const labels_clear = async (req, res, next) => {
+    const idClear = req.query.clear
+    try {
+       //const updated =  Label.updateMany({attachedId:idClear})
+       const updated = await  Label.updateMany({},{
+        $pull:{ attachedId:{$in:[idClear]}}
+       })
+       if(updated && updated.acknowledged){
+        console.log('vclear', req.query.clear)
+        console.log('vclear', updated)
+        next ()
+       }
+    } catch (error) {
+        console.log('eror clear', idClear)
+        res.send('eorr')
+    }
+}
+
 module.exports = {
     labels_get,
     labels_getById,
@@ -142,5 +160,6 @@ module.exports = {
     labels_put_query,
     labels_post,
     labels_delete,
+    labels_clear
 
 }
