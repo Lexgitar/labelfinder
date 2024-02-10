@@ -109,7 +109,8 @@ const logout_get = (req, res) => {
 const user_delete = async (req, res, next) => {
   console.log('req.id', req.query.id)
   const id = req.query.id
-  const deletePayload = await User.deleteOne({ _id: id })
+  const role = req.query.role
+  const deletePayload = await User.deleteOne({ _id: id , role: role })
   try {
     if (deletePayload.deletedCount === 1) {
       res.cookie('jwt', '', { maxAge: 1 });

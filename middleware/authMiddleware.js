@@ -88,6 +88,7 @@ const userCheck = (req, res, next) => {
                     let user = await User.findById(decodedToken.id)
                     if (user) {
                         req.query.id = user._id
+                        req.query.role = user.role
                         next()
                     }
                 }
@@ -152,4 +153,32 @@ const validateId = async (req, res, next) => {
     }
 }
 
-module.exports = { requireAuth, checkUser, checkAuthAndRole, requireAuthNRole, validateId, userCheck };
+const clearSubmitArray = async (req, res, next) => {
+    const roleByUrl = req.originalUrl.includes('bands') ? Label : Band
+    const idClear = req.query.clear
+    try {
+        //const updated =  Label.updateMany({attachedId:idClear})
+        const updated = await roleByUrl.updateMany({}, {
+            $pull: { attachedId: { $in: [idClear] } }
+        })
+        if (updated && updated.acknowledged) {
+            console.log('vclear', req.query.clear)
+            console.log('vclear', updated)
+            next()
+        }
+    } catch (error) {
+        console.log('eror clear', idClear)
+        res.send('eorr')
+    }
+}
+
+module.exports = {
+    requireAuth,
+    checkUser,
+    checkAuthAndRole,
+    requireAuthNRole,
+    validateId,
+    userCheck,
+    clearSubmitArray
+
+};
