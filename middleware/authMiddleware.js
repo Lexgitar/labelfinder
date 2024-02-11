@@ -157,7 +157,7 @@ const clearSubmitArray = async (req, res, next) => {
     const roleByUrl = req.originalUrl.includes('bands') ? Label : Band
     const idClear = req.query.clear
     try {
-        //const updated =  Label.updateMany({attachedId:idClear})
+       
         const updated = await roleByUrl.updateMany({}, {
             $pull: { attachedId: { $in: [idClear] } }
         })

@@ -42,20 +42,30 @@ UserSchema.pre('save', async function (next) {
     next()
 })
 
-UserSchema.pre('deleteOne', async function ( next) {
-    const dude = this.getFilter()
+UserSchema.pre('deleteOne', async function (next) {
     const role = this.getFilter().role
     const myUserId = this.getFilter()._id
-   
 
-    const modelToDelete = (role === 'band' ? Band : (role === 'label'? Label: Fan))
-    console.log('anteDel-model', modelToDelete , role, myUserId)
-    const foundModel = await modelToDelete.findOne({userId:myUserId})
-    const deletedModel = await modelToDelete.deleteOne({userId:myUserId})
-    
-    console.log('found?',modelToDelete, foundModel, deletedModel)
-    
-    next()
+    const modelToDelete = (role === 'band' ? Band : (role === 'label' ? Label : Fan))
+    //console.log('anteDel-model', modelToDelete, role, myUserId)
+    const foundModel = await modelToDelete.findOne({ userId: myUserId })
+
+    if (foundModel) {
+        console.log(foundModel)
+        const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id })
+        if (deletedModel) {
+          console.log('foundmodle', foundModel)
+          console.log('dlmodel', deletedModel)
+          try {
+              next()
+          } catch (error) {
+              return error
+          }
+        }
+    } else {
+        console.log(foundModel)
+        next()
+    }
 })
 //static method to ligin user
 UserSchema.statics.login = async function (email, password) {
