@@ -33,18 +33,19 @@ const BandSchema = new Schema({
 })
 
 BandSchema.pre('deleteOne', async function (next) {
-  //const modelName = this.model[Model]
+
   const band = await this.model.findOne(this.getQuery());
   const idClear = this.getFilter()._id.toString()
+
   try {
 
     const updated = await Label.updateMany({}, {
       $pull: { attachedId: { $in: [idClear] } }
     })
     if (updated && updated.acknowledged) {
-      console.log('vclear', band._id, idClear)
+
       console.log(idClear.toString())
-      console.log('vclear', updated)
+
       next()
     }
   } catch (error) {
@@ -52,8 +53,6 @@ BandSchema.pre('deleteOne', async function (next) {
     return error
   }
 
-  console.log('lala', band);
-  // The document that findOneAndUpdate() will modify
 })
 
 module.exports = mongoose.model('Band', BandSchema);

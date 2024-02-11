@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-//const { userInited } = require('../middleware/authMiddleware')
+const Band = require('./Band');
+
 
 const Schema = mongoose.Schema;
 const LabelSchema = new Schema({

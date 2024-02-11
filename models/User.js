@@ -51,17 +51,48 @@ UserSchema.pre('deleteOne', async function (next) {
     const foundModel = await modelToDelete.findOne({ userId: myUserId })
 
     if (foundModel) {
+
         console.log(foundModel)
-        const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id })
+        if (modelToDelete === Label) {
+            console.log('model2del', modelToDelete)
+            try {
+
+                const updated = await Band.updateMany({}, {
+                    $pull: { attachedId: { $in: [foundModel._id.toString()] } }
+                })
+                if (updated && updated.acknowledged) {
+
+                    console.log('founmodel id', foundModel._id)
+                    console.log('founmodel id str', foundModel._id.toString())
+                    const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id })
+                    if (deletedModel) {
+
+                        console.log('dlmodel joist', deletedModel)
+                        try {
+                            next()
+                        } catch (error) {
+                            return error
+                        }
+                    }
+                    
+                }
+            } catch (error) {
+                console.log('label eror clear')
+                return error
+            }
+        }else{
+            const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id })
         if (deletedModel) {
-          console.log('foundmodle', foundModel)
-          console.log('dlmodel', deletedModel)
-          try {
-              next()
-          } catch (error) {
-              return error
-          }
+            console.log('foundmodle', foundModel)
+            console.log('dlmodel', deletedModel)
+            try {
+                next()
+            } catch (error) {
+                return error
+            }
         }
+        }
+        
     } else {
         console.log(foundModel)
         next()
