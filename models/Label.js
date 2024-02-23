@@ -21,6 +21,14 @@ const LabelSchema = new Schema({
     type: String,
     
   },
+  about: {
+    type: String,
+    
+  },
+  links: {
+    type: String,
+    
+  },
   createdAt: {
     type: Date,
     default: Date.now

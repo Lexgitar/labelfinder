@@ -19,7 +19,15 @@ const BandSchema = new Schema({
   },
   genre: {
     type: String,
-
+    
+  },
+  about: {
+    type: String,
+    
+  },
+  links: {
+    type: String,
+    
   },
   createdAt: {
     type: Date,

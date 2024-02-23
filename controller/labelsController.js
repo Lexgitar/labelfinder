@@ -22,11 +22,11 @@ const labels_getById = async (req, res, next) => {
 const labels_put = async (req, res, next) => {
 
     const id = req.params.id
-    const { name, location } = req.body
+    const { name, location, genre, about, links } = req.body
 
     try {
         if (name && location) {
-            Label.findOneAndUpdate({ _id: id }, { name, location }).then(function () {
+            Label.findOneAndUpdate({ _id: id }, { name, location, genre, about, links }).then(function () {
                 Label.findOne({ _id: id }).then(function (label) {
                     res.send(label)
                 })
@@ -92,7 +92,7 @@ const labels_put_query = async (req, res, next) => {
 }
 
 const labels_post = async (req, res, next) => {
-    const { name, location } = req.body;
+    const { name, location, genre, about, links } = req.body;
     const userId = req.userId;
     const findItem = await Label.findOne({ userId })
 
@@ -101,7 +101,10 @@ const labels_post = async (req, res, next) => {
             const newLabel = await Label.create({
                 userId,
                 name,
-                location
+                location,
+                genre,
+                about,
+                links
             })
 
             res.send(newLabel);

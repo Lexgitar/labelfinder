@@ -15,6 +15,18 @@ const FanSchema = new Schema({
         type: String,
         required: true
       },
+      genre: {
+        type: String,
+        
+      },
+      about: {
+        type: String,
+        
+      },
+      links: {
+        type: String,
+        
+      },
     createdAt: {
         type: Date,
         default: Date.now

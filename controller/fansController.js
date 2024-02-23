@@ -23,12 +23,12 @@ const fans_getById = async (req, res, next) => {
 
 const fans_put = async (req, res, next) => {
     const id = req.params.id;
-    const { name, location } = req.body;
+    const { name, location, genre, about, links } = req.body;
     // console.log(name)
 
     try {
         if (name && location) {
-            Fan.findOneAndUpdate({ _id: id }, { name, location }).then(function () {
+            Fan.findOneAndUpdate({ _id: id }, { name, location, genre, about, links }).then(function () {
                 Fan.findOne({ _id: id }).then(function (fan) {
                     res.send(fan)
                 })
@@ -95,7 +95,7 @@ const fans_put_query = async (req, res, next) => {
 
 //make new band  + check only 1 item/user
 const fans_post = async (req, res, next) => {
-    const { name, location } = req.body;
+    const { name, location, genre, about, links } = req.body;
     const userId = req.userId;
     const findItem = await Fan.findOne({ userId })
     if (!findItem) {
@@ -104,6 +104,9 @@ const fans_post = async (req, res, next) => {
                 userId,
                 name,
                 location,
+                genre,
+                about,
+                links
 
             })
 
