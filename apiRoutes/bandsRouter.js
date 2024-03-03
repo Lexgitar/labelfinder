@@ -1,7 +1,8 @@
 const bandsRouter = require('express').Router();
 const bandsController = require('../controller/bandsController')
-const { checkAuthAndRole, requireAuth, validateId, clearSubmitArray } = require('../middleware/authMiddleware')
-const labelController = require('../controller/labelsController')
+const { checkAuthAndRole, requireAuth, validateId } = require('../middleware/authMiddleware')
+
+
 bandsRouter.get('/', bandsController.bands_get)
 bandsRouter.get('/:id', validateId, bandsController.bands_getById)
 bandsRouter.post('/', checkAuthAndRole, bandsController.bands_post)

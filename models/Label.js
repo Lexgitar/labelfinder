@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Band = require('./Band');
+
 
 
 const Schema = mongoose.Schema;

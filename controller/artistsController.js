@@ -1,11 +1,12 @@
-const Fan = require ('../models/Fan')
-const {handleDocErrors} = require('../controller/authController')
+const Artist = require('../models/Artist')
+const { handleDocErrors } = require('../controller/authController')
 
-const fans_get = async (req, res, next) => {
-    const fans = await Fan.find()
+
+const artists_get = async (req, res, next) => {
+    const artists = await Artist.find()
     try {
-        if (fans) {
-            res.send(fans)
+        if (artists) {
+            res.send(artists)
         }
     } catch (error) {
         res.status(400).json(error.message)
@@ -14,23 +15,23 @@ const fans_get = async (req, res, next) => {
 
 };
 
-const fans_getById = async (req, res, next) => {
+const artists_getById = async (req, res, next) => {
     const { id } = req.params
-    Fan.findOne({ _id: id }).then(function (fan) {
-        res.send(fan)
+    Artist.findOne({ _id: id }).then(function (artist) {
+        res.send(artist)
     })
 }
 
-const fans_put = async (req, res, next) => {
+const artists_put = async (req, res, next) => {
     const id = req.params.id;
     const { name, location, about, links } = req.body;
     // console.log(name)
 
     try {
         if (name && location) {
-            Fan.findOneAndUpdate({ _id: id }, { name, location, about, links }).then(function () {
-                Fan.findOne({ _id: id }).then(function (fan) {
-                    res.send(fan)
+            Artist.findOneAndUpdate({ _id: id }, { name, location, about, links }).then(function () {
+                Artist.findOne({ _id: id }).then(function (artist) {
+                    res.send(artist)
                 })
             });
         } else {
@@ -45,24 +46,24 @@ const fans_put = async (req, res, next) => {
 
 }
 
-const fans_put_query = async (req, res, next) => {
+const artists_put_query = async (req, res, next) => {
     const id = req.params.id
     try {
         if (id && req.query.attach) {
 
             const attachedId = req.query.attach
 
-            Fan.findOne({ _id: id }).then(function (fan) {
-                if (fan.attachedId.includes(attachedId)) {
+            Artist.findOne({ _id: id }).then(function (artist) {
+                if (artist.attachedId.includes(attachedId)) {
                     res.status(400).json('Already attached')
 
                 } else {
 
-                    Fan.updateOne({ _id: id }, { $push: { attachedId: attachedId } }).then(function () {
-                        Fan.findOne({ _id: id }).then(function (fan) {
+                    Artist.updateOne({ _id: id }, { $push: { attachedId: attachedId } }).then(function () {
+                        Artist.findOne({ _id: id }).then(function (artist) {
                             console.log('clog', req.query.attach, req.params.id)
 
-                            res.send(fan.attachedId)
+                            res.send(artist.attachedId)
                         })
                     });
                 }
@@ -71,13 +72,13 @@ const fans_put_query = async (req, res, next) => {
         } else if (id && req.query.detach) {
             const idToDetach = req.query.detach
 
-            Fan.findOne({ _id: id }).then(function (fan) {
-                if (fan.attachedId.includes(idToDetach)) {
-                    Fan.updateOne({ _id: id }, { $pull: { attachedId: idToDetach } }).then(function () {
-                        Fan.findOne({ _id: id }).then(function (fan) {
+            Artist.findOne({ _id: id }).then(function (artist) {
+                if (artist.attachedId.includes(idToDetach)) {
+                    Artist.updateOne({ _id: id }, { $pull: { attachedId: idToDetach } }).then(function () {
+                        Artist.findOne({ _id: id }).then(function (artist) {
                             console.log('clogdetach', idToDetach, req.params.id)
 
-                            res.send(fan.attachedId)
+                            res.send(artist.attachedId)
 
                         })
                     });
@@ -94,13 +95,13 @@ const fans_put_query = async (req, res, next) => {
 }
 
 //make new band  + check only 1 item/user
-const fans_post = async (req, res, next) => {
-    const { name, location, about, links } = req.body;
+const artists_post = async (req, res, next) => {
+    const { name, location, about, links  } = req.body;
     const userId = req.userId;
-    const findItem = await Fan.findOne({ userId })
+    const findItem = await Artist.findOne({ userId })
     if (!findItem) {
         try {
-            const newFan = await Fan.create({
+            const newArtist = await Artist.create({
                 userId,
                 name,
                 location,
@@ -109,7 +110,7 @@ const fans_post = async (req, res, next) => {
 
             })
 
-            res.send(newFan);
+            res.send(newArtist);
 
         } catch (err) {
 
@@ -124,9 +125,9 @@ const fans_post = async (req, res, next) => {
 }
 
 //delete by id
-const fans_delete = async (req, res, next) => {
+const artists_delete = async (req, res, next) => {
     const { id } = req.params
-    const deletePayload = await Fan.deleteOne({ _id: id })
+    const deletePayload = await Artist.deleteOne({ _id: id })
     try {
         if (deletePayload.deletedCount === 1) {
             res.send('User-role-details deleted')
@@ -140,12 +141,13 @@ const fans_delete = async (req, res, next) => {
         res.status(400).json(err.message)
     }
 }
-    
-    module.exports = {
-        fans_get,
-        fans_getById,
-        fans_put,
-        fans_post,
-        fans_delete,
-        
-    }
+
+
+module.exports = {
+    artists_get,
+    artists_getById,
+    artists_put,
+    artists_put_query,
+    artists_post,
+    artists_delete,
+}

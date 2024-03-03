@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+
 const Label = require('./Label');
+const Artist = require('./Artist')
 
 const Schema = mongoose.Schema;
 const BandSchema = new Schema({
@@ -50,7 +52,10 @@ BandSchema.pre('deleteOne', async function (next) {
     const updated = await Label.updateMany({}, {
       $pull: { attachedId: { $in: [idClear] } }
     })
-    if (updated && updated.acknowledged) {
+    const updatedArtist = await Artist.updateMany({}, {
+      $pull: { attachedId: { $in: [idClear] } }
+    })
+    if (updated && updated.acknowledged && updatedArtist.acknowledged) {
 
       console.log(idClear.toString())
 

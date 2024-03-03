@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { isEmail } = require('validator');
 const bcrypt = require('bcrypt');
 
+const Artist = require('./Artist')
 const Band = require('./Band')
 const Label = require('./Label')
 const Fan = require('./Fan')
@@ -22,8 +23,8 @@ const UserSchema = new mongoose.Schema({
     role: {
         type: String,
         required: [true, 'Please define role'],
-        enum: ['label', 'band', 'fan'],
-        description: 'Must choose between label, band or fan'
+        enum: ['label', 'band', 'artist', 'fan'],
+        description: 'Must choose between label, band, artist or fan'
     },
     inited: {
         type: Boolean
@@ -56,11 +57,13 @@ UserSchema.pre('deleteOne', async function (next) {
         if (modelToDelete === Label) {
             console.log('model2del', modelToDelete)
             try {
-
+                const updatedArtist = await Artist.updateMany({}, {
+                    $pull: { attachedId: { $in: [idClear] } }
+                })
                 const updated = await Band.updateMany({}, {
                     $pull: { attachedId: { $in: [foundModel._id.toString()] } }
                 })
-                if (updated && updated.acknowledged) {
+                if (updated && updated.acknowledged && updatedArtist.acknowledged) {
 
                     console.log('founmodel id', foundModel._id)
                     console.log('founmodel id str', foundModel._id.toString())
@@ -74,25 +77,54 @@ UserSchema.pre('deleteOne', async function (next) {
                             return error
                         }
                     }
-                    
+
                 }
             } catch (error) {
                 console.log('label eror clear')
                 return error
             }
-        }else{
-            const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id })
-        if (deletedModel) {
-            console.log('foundmodle', foundModel)
-            console.log('dlmodel', deletedModel)
+        } else if (modelToDelete === Artist) {
+            console.log('model2del', modelToDelete)
             try {
-                next()
+                const updatedLabel = await Label.updateMany({}, {
+                    $pull: { attachedId: { $in: [idClear] } }
+                })
+                const updated = await Band.updateMany({}, {
+                    $pull: { attachedId: { $in: [foundModel._id.toString()] } }
+                })
+                if (updated && updated.acknowledged && updatedArtist.acknowledged) {
+
+                    console.log('founmodel id', foundModel._id)
+                    console.log('founmodel id str', foundModel._id.toString())
+                    const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id })
+                    if (deletedModel) {
+
+                        console.log('dlmodel joist', deletedModel)
+                        try {
+                            next()
+                        } catch (error) {
+                            return error
+                        }
+                    }
+
+                }
             } catch (error) {
+                console.log('label eror clear')
                 return error
             }
+        } else {
+            const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id })
+            if (deletedModel) {
+                console.log('foundmodle', foundModel)
+                console.log('dlmodel', deletedModel)
+                try {
+                    next()
+                } catch (error) {
+                    return error
+                }
+            }
         }
-        }
-        
+
     } else {
         console.log(foundModel)
         next()

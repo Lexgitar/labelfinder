@@ -3,7 +3,8 @@ const jwtSecret = process.env.JWT_SECRET;
 const User = require('../models/User');
 //
 const Label = require('../models/Label')
-const Band = require('../models/Band')
+const Band = require('../models/Band');
+const Artist = require('../models/Artist');
 
 //
 //
@@ -154,14 +155,23 @@ const validateId = async (req, res, next) => {
 }
 
 const clearSubmitArray = async (req, res, next) => {
-    const roleByUrl = req.originalUrl.includes('bands') ? Label : Band
+    const roleByUrl = req.originalUrl.includes('labels') ? Band : Label
+    const secondRole = roleByUrl === Band ? Artist : Band 
+                         
+
+     console.log('rolebyurl', roleByUrl)
+     console.log('secondrol', secondRole)
     const idClear = req.query.clear
     try {
-       
+
         const updated = await roleByUrl.updateMany({}, {
             $pull: { attachedId: { $in: [idClear] } }
         })
-        if (updated && updated.acknowledged) {
+
+        const secondUpdated = await secondRole.updateMany({}, {
+            $pull: { attachedId: { $in: [idClear] } }
+        })
+        if (updated && updated.acknowledged && secondUpdated.acknowledged) {
             console.log('vclear', req.query.clear)
             console.log('vclear', updated)
             next()
