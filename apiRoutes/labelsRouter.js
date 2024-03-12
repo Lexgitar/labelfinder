@@ -1,6 +1,6 @@
 const labelsRouter = require('express').Router();
 const labelsController = require('../controller/labelsController')
-const { checkAuthAndRole, requireAuth, validateId, clearSubmitArray  } = require('../middleware/authMiddleware')
+const { checkAuthAndRole, requireAuth, validateId, clearSubmitArray } = require('../middleware/authMiddleware')
 
 
 //
@@ -13,7 +13,7 @@ labelsRouter.post('/', checkAuthAndRole, labelsController.labels_post)
 labelsRouter.put('/:id', validateId, requireAuth, labelsController.labels_put_query)
 labelsRouter.put('/:id', checkAuthAndRole, labelsController.labels_put)
 
-labelsRouter.delete('/:id', validateId, checkAuthAndRole, clearSubmitArray,  labelsController.labels_delete)
+labelsRouter.delete('/:id', validateId, checkAuthAndRole, clearSubmitArray, labelsController.labels_delete)
 
 
 

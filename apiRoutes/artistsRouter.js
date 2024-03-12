@@ -1,7 +1,7 @@
 const artistsRouter = require('express').Router()
 const artistsController = require('../controller/artistsController')
 
-const { checkAuthAndRole, requireAuth, validateId, clearSubmitArray  } = require('../middleware/authMiddleware')
+const { checkAuthAndRole, requireAuth, validateId, clearSubmitArray } = require('../middleware/authMiddleware')
 
 artistsRouter.get('/', artistsController.artists_get)
 artistsRouter.get('/:id', validateId, artistsController.artists_getById)

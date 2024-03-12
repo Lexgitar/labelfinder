@@ -107,7 +107,7 @@ const userCheck = (req, res, next) => {
 
 const checkAuthAndRole = (req, res, next) => {
     const token = req.cookies.jwt;
-    console.log('validate-chauthnrol', req.query.clear)
+    //console.log('validate-chauthnrol', req.query.clear)
     if (token) {
         jwt.verify(token, jwtSecret, async (err, decodedToken) => {
             if (err) {
@@ -135,12 +135,13 @@ const checkAuthAndRole = (req, res, next) => {
 }
 //validate ID to be queried exists!
 const validateId = async (req, res, next) => {
-    const roleByUrl = req.originalUrl.includes('labels') ? Label : Band
+    let roleByUrl = (req.originalUrl.includes('labels') ? Label : (req.originalUrl.includes('bands') ? Band : Artist))
 
     const { id } = req.params
     req.query.clear = id
     const role = await roleByUrl.findOne({ _id: id })
     console.log('validate', req.query.clear)
+    console.log('rolebyurl-', roleByUrl)
     try {
         if (role) {
 
@@ -156,11 +157,11 @@ const validateId = async (req, res, next) => {
 
 const clearSubmitArray = async (req, res, next) => {
     const roleByUrl = req.originalUrl.includes('labels') ? Band : Label
-    const secondRole = roleByUrl === Band ? Artist : Band 
-                         
+    const secondRole = roleByUrl === Band ? Artist : Band
 
-     console.log('rolebyurl', roleByUrl)
-     console.log('secondrol', secondRole)
+
+    console.log('rolebyurl', roleByUrl)
+    console.log('secondrol', secondRole)
     const idClear = req.query.clear
     try {
 
