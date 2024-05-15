@@ -122,6 +122,7 @@ const checkAuthAndRole = (req, res, next) => {
                 if (req.baseUrl === `/api/${user.role}s`) {
                     console.log('CHECKED');
                     req.userId = user._id;
+                    req.role = user.role
 
 
                     next();

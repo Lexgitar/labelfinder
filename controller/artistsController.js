@@ -98,6 +98,7 @@ const artists_put_query = async (req, res, next) => {
 const artists_post = async (req, res, next) => {
     const { name, location, about, links  } = req.body;
     const userId = req.userId;
+    const role = req.role
     const findItem = await Artist.findOne({ userId })
     if (!findItem) {
         try {
@@ -106,7 +107,8 @@ const artists_post = async (req, res, next) => {
                 name,
                 location,
                 about,
-                links
+                links,
+                role
 
             })
 

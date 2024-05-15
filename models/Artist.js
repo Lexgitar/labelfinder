@@ -23,6 +23,10 @@ const ArtistSchema = new Schema({
         type: String,
 
     },
+    role: {
+        type: String,
+        
+    },
     createdAt: {
         type: Date,
         default: Date.now
