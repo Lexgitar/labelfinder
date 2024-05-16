@@ -94,6 +94,7 @@ const labels_put_query = async (req, res, next) => {
 const labels_post = async (req, res, next) => {
     const { name, location, genre, about, links } = req.body;
     const userId = req.userId;
+    const role = req.role
     const findItem = await Label.findOne({ userId })
 
     if (!findItem) {
@@ -104,7 +105,8 @@ const labels_post = async (req, res, next) => {
                 location,
                 genre,
                 about,
-                links
+                links, 
+                role
             })
 
             res.send(newLabel);

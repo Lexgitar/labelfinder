@@ -32,6 +32,10 @@ const LabelSchema = new Schema({
   role: {
     type: String,
 },
+role: {
+  type: String,
+  
+},
   createdAt: {
     type: Date,
     default: Date.now
