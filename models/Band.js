@@ -66,7 +66,7 @@ BandSchema.pre('deleteOne', async function (next) {
       next()
     }
   } catch (error) {
-    console.log('eror clear')
+    console.log('eror clear from BAND')
     return error
   }
 

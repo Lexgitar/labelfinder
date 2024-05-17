@@ -47,7 +47,7 @@ UserSchema.pre('deleteOne', async function (next) {
     const role = this.getFilter().role
     const myUserId = this.getFilter()._id
 
-    const modelToDelete = (role === 'band' ? Band : (role === 'label' ? Label : Fan))
+    const modelToDelete = (role === 'band' ? Band : (role === 'label' ? Label : (role === 'artist'? Artist : Fan)))
     //console.log('anteDel-model', modelToDelete, role, myUserId)
     const foundModel = await modelToDelete.findOne({ userId: myUserId })
 
@@ -58,7 +58,7 @@ UserSchema.pre('deleteOne', async function (next) {
             console.log('model2del', modelToDelete)
             try {
                 const updatedArtist = await Artist.updateMany({}, {
-                    $pull: { attachedId: { $in: [idClear] } }
+                    $pull: { attachedId: { $in: [foundModel._id.toString()] } }
                 })
                 const updated = await Band.updateMany({}, {
                     $pull: { attachedId: { $in: [foundModel._id.toString()] } }
@@ -67,7 +67,7 @@ UserSchema.pre('deleteOne', async function (next) {
 
                     console.log('founmodel id', foundModel._id)
                     console.log('founmodel id str', foundModel._id.toString())
-                    const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id })
+                    const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id.toString() })
                     if (deletedModel) {
 
                         console.log('dlmodel joist', deletedModel)
@@ -80,23 +80,23 @@ UserSchema.pre('deleteOne', async function (next) {
 
                 }
             } catch (error) {
-                console.log('label eror clear')
+                console.log('label eror clear', error)
                 return error
             }
         } else if (modelToDelete === Artist) {
-            console.log('model2del', modelToDelete)
+            console.log('model2delart', modelToDelete)
             try {
                 const updatedLabel = await Label.updateMany({}, {
-                    $pull: { attachedId: { $in: [idClear] } }
+                    $pull: { attachedId: { $in: [foundModel._id.toString()] } }
                 })
                 const updated = await Band.updateMany({}, {
                     $pull: { attachedId: { $in: [foundModel._id.toString()] } }
                 })
-                if (updated && updated.acknowledged && updatedArtist.acknowledged) {
+                if (updated && updated.acknowledged && updatedLabel.acknowledged) {
 
                     console.log('founmodel id', foundModel._id)
                     console.log('founmodel id str', foundModel._id.toString())
-                    const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id })
+                    const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id.toString() })
                     if (deletedModel) {
 
                         console.log('dlmodel joist', deletedModel)
@@ -109,11 +109,11 @@ UserSchema.pre('deleteOne', async function (next) {
 
                 }
             } catch (error) {
-                console.log('label eror clear')
+                console.log('artist eror clear')
                 return error
             }
         } else {
-            const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id })
+            const deletedModel = await modelToDelete.deleteOne({ _id: foundModel._id.toString() })
             if (deletedModel) {
                 console.log('foundmodle', foundModel)
                 console.log('dlmodel', deletedModel)
