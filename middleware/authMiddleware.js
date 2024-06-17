@@ -156,6 +156,8 @@ const validateId = async (req, res, next) => {
     }
 }
 
+
+
 const clearSubmitArray = async (req, res, next) => {
     const roleByUrl = req.originalUrl.includes('labels') ? Band : Label
     const secondRole = roleByUrl === Band ? Artist : Band
@@ -191,6 +193,7 @@ module.exports = {
     requireAuthNRole,
     validateId,
     userCheck,
-    clearSubmitArray
+    clearSubmitArray, 
+    
 
 };
