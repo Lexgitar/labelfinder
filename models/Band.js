@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const Label = require('./Label');
 const Artist = require('./Artist')
+const User = require('./User')
 
 const Schema = mongoose.Schema;
 const BandSchema = new Schema({
@@ -71,6 +72,20 @@ BandSchema.pre('deleteOne', async function (next) {
   }
 
 })
+
+BandSchema.post('save', async function () {
+  const thisuserId = this.userId
+  User.findOneAndUpdate({ _id: thisuserId }, { itemId: this._id })
+  .then(function () {
+      User.findOne({ _id: thisuserId })
+     // // .then(function (user) {
+     // //     console.log('klk', thisuserId)
+     // //     console.log('mere?', user)
+    //  // })
+  });
+  
+})
+
 
 module.exports = mongoose.model('Band', BandSchema);
 

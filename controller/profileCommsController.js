@@ -81,10 +81,48 @@ const profileComment_put = async (req, res, next) => {
 
 }
 
+const profileComment_delete = async (req, res, next) => {
+    const { id } = req.params
+    const deletePayload = await ProfileComment.deleteOne({ profileId: id })
+    try {
+        if (deletePayload.deletedCount === 1) {
+            res.send('User-role-details deleted')
+        } else if (deletePayload.deletedCount === 0) {
+            res.send('Attempt not succesful')
+        } else {
+            throw new Error('Delete unsuccesful')
+        }
+    } catch (err) {
+
+        res.status(400).json(err.message)
+    }
+}
+
+
+const comment_delete = async (req, res, next) => {
+    const { id } = req.params
+    const deletePayload = await Label.deleteOne({ _id: id })
+    try {
+        if (deletePayload.deletedCount === 1) {
+            res.send('User-role-details deleted')
+        } else if (deletePayload.deletedCount === 0) {
+            res.send('Attempt not succesful')
+        } else {
+            throw new Error('Delete unsuccesful')
+        }
+    } catch (err) {
+
+        res.status(400).json(err.message)
+    }
+}
+
+
 module.exports = {
     profileComment_get,
     profileComment_getByProfileId,
     profileComment_post,
-    profileComment_put
+    profileComment_put,
+    profileComment_delete,
+    comment_delete,
 
 }

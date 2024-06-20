@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+//const User = require('./User')
+
 const Schema = mongoose.Schema
 const ArtistSchema = new Schema({
     userId: {
@@ -38,4 +40,18 @@ const ArtistSchema = new Schema({
     attachedId: []
 })
 
+// ArtistSchema.post('save', async function () {
+//     const thisuserId = this.userId
+//     User.findOneAndUpdate({ _id: thisuserId }, { itemId: this._id })
+//     .then(function () {
+//         User.findOne({ _id: thisuserId })
+//        .then(function (user) {
+//            console.log('klk', thisuserId)
+//            console.log('mere?', user)
+//        })
+//     });
+    
+// })
+
 module.exports = mongoose.model('Artist', ArtistSchema)
+

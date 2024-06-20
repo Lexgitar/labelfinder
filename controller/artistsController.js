@@ -1,4 +1,5 @@
 const Artist = require('../models/Artist')
+const User = require('../models/User')
 const { handleDocErrors } = require('../controller/authController')
 
 
@@ -96,7 +97,7 @@ const artists_put_query = async (req, res, next) => {
 
 //make new band  + check only 1 item/user
 const artists_post = async (req, res, next) => {
-    const { name, location, about, links  } = req.body;
+    const { name, location, about, links } = req.body;
     const userId = req.userId;
     const role = req.role
     const findItem = await Artist.findOne({ userId })
@@ -111,6 +112,14 @@ const artists_post = async (req, res, next) => {
                 role
 
             })
+            User.findOneAndUpdate({ _id: newArtist.userId }, { itemId: newArtist._id })
+                .then(function () {
+                    User.findOne({ _id: newArtist.userId })
+                        .then(function (user) {
+                            
+                            console.log('mere?', user)
+                        })
+                });
 
             res.send(newArtist);
 

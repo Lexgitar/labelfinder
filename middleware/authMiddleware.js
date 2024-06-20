@@ -101,7 +101,32 @@ const userCheck = (req, res, next) => {
     }
 
 }
-//
+//userCheckforComms
+const userCheckforComms = (req, res, next) => {
+
+    const token = req.cookies.jwt
+
+    try {
+        if (token) {
+            jwt.verify(token, jwtSecret, async (err, decodedToken) => {
+                if (err) {
+                    throw new Error(err.message)
+                } else {
+                    console.log(decodedToken)
+                    let user = await User.findById(decodedToken.id)
+                    if (user) {
+                       
+                        next()
+                    }
+                }
+
+            })
+        }
+    } catch (error) {
+        res.status(400).json(error)
+    }
+
+}
 
 // check role
 
@@ -194,6 +219,7 @@ module.exports = {
     validateId,
     userCheck,
     clearSubmitArray, 
+    userCheckforComms,
     
 
 };
