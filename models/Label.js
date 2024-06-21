@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const User = require('./User')
+const ProfileComment = require('./ProfileComments')
 
 const Schema = mongoose.Schema;
 const LabelSchema = new Schema({
@@ -47,6 +48,18 @@ role: {
   attachedId: []
 })
 
+
+
+LabelSchema.pre('deleteOne',{ query: true, document: false }, async function(){
+  const id = this._id
+  const profile = await ProfileComment.findOne({profileId:id})
+  if(profile){
+    ProfileComment.deleteOne({profileId:id})
+    console.log('trecut0')
+  }
+  console.log('hello from label predelete one')
+})
+
 LabelSchema.post('save', async function () {
   const thisuserId = this.userId
   User.findOneAndUpdate({ _id: thisuserId }, { itemId: this._id })
@@ -57,6 +70,7 @@ LabelSchema.post('save', async function () {
      // //     console.log('mere?', user)
     //  // })
   });
+
   
 })
 

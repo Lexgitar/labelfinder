@@ -21,4 +21,18 @@ const ProfileCommentsSchema = new Schema({
 
 })
 
+ProfileCommentsSchema.pre('deleteOne', async function(){
+    console.log('ried from schema')
+    try {
+        this.updateMany(
+            // {comments:{authorId:this.profileId}},
+            {},
+             {$pull:{comments:{authorId:this.profileId}}})
+        console.log('trecut')
+    } catch (error) {
+        console.log('many eror')
+        return error
+    }
+})
+
 module.exports = mongoose.model('ProfileComment', ProfileCommentsSchema)

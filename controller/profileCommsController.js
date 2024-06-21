@@ -27,9 +27,10 @@ const profileComment_getByProfileId = async (req, res, next) => {
 const profileComment_post = async (req, res, next) => {
     const { body, authorId } = req.body;
     const profileId = req.query.id
+    const userItemId = req.query.userItemId
 
     const findItem = await ProfileComment.findOne({ profileId })
-    if (!findItem) {
+    if (!findItem && userItemId !== profileId) {
         try {
             const newProfileComm = await ProfileComment.create({
                 profileId,
@@ -60,12 +61,11 @@ const profileComment_put = async (req, res, next) => {
     const profileId = req.params.id
     const { body, authorId } = req.body
     const deleteId = req.query.delete
-    //const comment = await CommentBody.create({body, authorId})
-    // let _id = new ObjectId()
+    const userItemId = req.query.userItemId
     const comment = { _id: new ObjectId(), body, authorId }
 
     try {
-        if (profileId, body, authorId && !deleteId) {
+        if (profileId, body, authorId && !deleteId && profileId !== userItemId) {
             ProfileComment.updateOne({ profileId }, { $push: { comments: comment } }).then(function () {
                 ProfileComment.findOne({ profileId }).then(function (profileComment) {
                     console.log('clog pcput', profileId, body, authorId)

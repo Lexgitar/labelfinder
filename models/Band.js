@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const Label = require('./Label');
 const Artist = require('./Artist')
 const User = require('./User')
+const ProfileComment = require('./ProfileComments')
+
 
 const Schema = mongoose.Schema;
 const BandSchema = new Schema({
@@ -22,20 +24,20 @@ const BandSchema = new Schema({
   },
   genre: {
     type: String,
-    
+
   },
   about: {
     type: String,
-    
+
   },
   links: {
     type: String,
-    
+
   },
   role: {
     type: String,
-    
-},
+
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -48,6 +50,8 @@ const BandSchema = new Schema({
 })
 
 BandSchema.pre('deleteOne', async function (next) {
+
+  console.log('hello from bandpredeleteone2')
 
   const band = await this.model.findOne(this.getQuery());
   const idClear = this.getFilter()._id.toString()
@@ -76,14 +80,30 @@ BandSchema.pre('deleteOne', async function (next) {
 BandSchema.post('save', async function () {
   const thisuserId = this.userId
   User.findOneAndUpdate({ _id: thisuserId }, { itemId: this._id })
-  .then(function () {
+    .then(function () {
       User.findOne({ _id: thisuserId })
-     // // .then(function (user) {
-     // //     console.log('klk', thisuserId)
-     // //     console.log('mere?', user)
-    //  // })
-  });
-  
+      // // .then(function (user) {
+      // //     console.log('klk', thisuserId)
+      // //     console.log('mere?', user)
+      //  // })
+    });
+
+  BandSchema.post('deleteOne',{ query: true, document: false }, async function () {
+    const id = this._id
+    console.log('trecut0', id)
+    ProfileComment.findOne({ profileId: id }).then(function (profile) {
+      if (profile) {
+        ProfileComment.deleteOne({ profileId: id }).then(function(profile){
+          console.log('trecut0', profile)
+        })
+        console.log('trecut0')
+      }
+    }
+    )
+    console.log('hello from bandpostdeleteone')
+
+  })
+
 })
 
 

@@ -115,7 +115,7 @@ const userCheckforComms = (req, res, next) => {
                     console.log(decodedToken)
                     let user = await User.findById(decodedToken.id)
                     if (user) {
-                       
+                       req.query.userItemId = user.itemId
                         next()
                     }
                 }
