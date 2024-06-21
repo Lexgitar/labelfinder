@@ -1,16 +1,16 @@
 const profileCommsRouter = require('express').Router();
 const profileCommsController = require('../controller/profileCommsController')
-const { userCheckforComms  } = require('../middleware/authMiddleware')
+const { userCheckforComms, userAndItemIdCheck, checkForCommDelete  } = require('../middleware/authMiddleware')
 //get one
 
 //
 profileCommsRouter.post('/', userCheckforComms, profileCommsController.profileComment_post)
 //
-profileCommsRouter.put('/:id', userCheckforComms, profileCommsController.profileComment_put)
+profileCommsRouter.put('/:id', userCheckforComms, profileCommsController.profileComment_put, checkForCommDelete, profileCommsController.comment_delete)
 //delete one comment
 
 //delete one profileComment
-profileCommsRouter.delete('/:id', userCheckforComms, profileCommsController.profileComment_delete)
+profileCommsRouter.delete('/:id', userAndItemIdCheck, profileCommsController.profileComment_delete)
 
 
 module.exports = profileCommsRouter

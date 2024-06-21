@@ -127,6 +127,69 @@ const userCheckforComms = (req, res, next) => {
     }
 
 }
+// user check - check for item id 
+
+
+const userAndItemIdCheck = (req, res, next) => {
+
+    const token = req.cookies.jwt
+    const paramsId = req.params.id
+
+    try {
+        if (token) {
+            jwt.verify(token, jwtSecret, async (err, decodedToken) => {
+                if (err) {
+                    throw new Error(err.message)
+                } else {
+                   // //console.log(decodedToken)
+                    let user = await User.findById(decodedToken.id)
+                    if (user && user.itemId === paramsId) {
+                       
+                        next()
+                    }
+                }
+
+            })
+        }
+    } catch (error) {
+        res.status(400).json(error)
+    }
+
+}
+//
+// check for delete single comm
+
+const checkForCommDelete = (req, res, next) => {
+
+    const token = req.cookies.jwt
+    const paramsId = req.params.id
+    const deleteId = req.query.delete
+
+    try {
+        if (token) {
+            jwt.verify(token, jwtSecret, async (err, decodedToken) => {
+                if (err) {
+                    throw new Error(err.message)
+                } else {
+                   // //console.log(decodedToken)
+                    let user = await User.findById(decodedToken.id)
+                    if ((user && user.itemId === paramsId) || (user && user.itemId === deleteId )) {
+                       console.log('checkdel')
+                        next()
+                    }else{
+                        throw new Error('cannot delete comm')
+                    }
+                }
+
+                
+
+            })
+        }
+    } catch (error) {
+        res.status(400).json(error)
+    }
+
+}
 
 // check role
 
@@ -220,6 +283,8 @@ module.exports = {
     userCheck,
     clearSubmitArray, 
     userCheckforComms,
+    userAndItemIdCheck,
+    checkForCommDelete,
     
 
 };
