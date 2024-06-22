@@ -53,25 +53,29 @@ BandSchema.pre('deleteOne', async function (next) {
 
   console.log('hello from bandpredeleteone2')
 
-  const band = await this.model.findOne(this.getQuery());
+  // const band = await this.model.findOne(this.getQuery());
   const idClear = this.getFilter()._id.toString()
 
   try {
-
+    const updateComm = await ProfileComment.updateMany(
+      {},
+      { $pull: { comments: { authorId: idClear } } }).then(function(){
+        ProfileComment.deleteOne({ profileId: idClear })
+      }) 
     const updated = await Label.updateMany({}, {
       $pull: { attachedId: { $in: [idClear] } }
     })
     const updatedArtist = await Artist.updateMany({}, {
       $pull: { attachedId: { $in: [idClear] } }
     })
-    if (updated && updated.acknowledged && updatedArtist.acknowledged) {
+    if (updated && updated.acknowledged && updatedArtist.acknowledged && updateComm) {
 
       console.log(idClear.toString())
 
       next()
     }
   } catch (error) {
-    console.log('eror clear from BAND')
+    console.log('eror clear from BAND', error)
     return error
   }
 
@@ -88,21 +92,21 @@ BandSchema.post('save', async function () {
       //  // })
     });
 
-  BandSchema.post('deleteOne',{ query: true, document: false }, async function () {
-    const id = this._id
-    console.log('trecut0', id)
-    ProfileComment.findOne({ profileId: id }).then(function (profile) {
-      if (profile) {
-        ProfileComment.deleteOne({ profileId: id }).then(function(profile){
-          console.log('trecut0', profile)
-        })
-        console.log('trecut0')
-      }
-    }
-    )
-    console.log('hello from bandpostdeleteone')
+  // BandSchema.post('deleteOne',{ query: true, document: false }, async function () {
+  //   const id = this.getFilter()._id.toString()
+  //   console.log('trecut0', id)
+  //   ProfileComment.findOne({ profileId: id }).then(function (profile) {
+  //     if (profile) {
+  //       ProfileComment.deleteOne({ profileId: id }).then(function(profile){
+  //         console.log('trecut0', profile)
+  //       })
+  //       console.log('trecut0')
+  //     }
+  //   }
+  //   )
+  //   console.log('hello from bandpostdeleteone + id', id)
 
-  })
+  // })
 
 })
 

@@ -50,14 +50,15 @@ role: {
 
 
 
-LabelSchema.pre('deleteOne',{ query: true, document: false }, async function(){
-  const id = this._id
+//LabelSchema.pre('deleteOne',{ query: true, document: false }, async function(){
+LabelSchema.pre('deleteOne', async function(){
+  const id = this.getFilter()._id.toString()
   const profile = await ProfileComment.findOne({profileId:id})
   if(profile){
-    ProfileComment.deleteOne({profileId:id})
-    console.log('trecut0')
+   let deleted = await ProfileComment.deleteOne({profileId:id})
+    console.log('trecut0', profile, deleted)
   }
-  console.log('hello from label predelete one')
+  console.log('hello from label predelete one + id:', id)
 })
 
 LabelSchema.post('save', async function () {
