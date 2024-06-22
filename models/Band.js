@@ -59,16 +59,15 @@ BandSchema.pre('deleteOne', async function (next) {
   try {
     const updateComm = await ProfileComment.updateMany(
       {},
-      { $pull: { comments: { authorId: idClear } } }).then(function(){
-        ProfileComment.deleteOne({ profileId: idClear })
-      }) 
+      { $pull: { comments: { authorId: idClear } } })
+    const delProfileComm = await ProfileComment.deleteOne({ profileId: idClear })  
     const updated = await Label.updateMany({}, {
       $pull: { attachedId: { $in: [idClear] } }
     })
     const updatedArtist = await Artist.updateMany({}, {
       $pull: { attachedId: { $in: [idClear] } }
     })
-    if (updated && updated.acknowledged && updatedArtist.acknowledged && updateComm) {
+    if (updated && updated.acknowledged && updatedArtist.acknowledged && updateComm && delProfileComm) {
 
       console.log(idClear.toString())
 

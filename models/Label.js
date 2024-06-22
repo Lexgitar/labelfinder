@@ -20,23 +20,23 @@ const LabelSchema = new Schema({
   },
   genre: {
     type: String,
-    
+
   },
   about: {
     type: String,
-    
+
   },
   links: {
     type: String,
-    
+
   },
   role: {
     type: String,
-},
-role: {
-  type: String,
-  
-},
+  },
+  role: {
+    type: String,
+
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -51,12 +51,23 @@ role: {
 
 
 //LabelSchema.pre('deleteOne',{ query: true, document: false }, async function(){
-LabelSchema.pre('deleteOne', async function(){
+LabelSchema.pre('deleteOne', async function () {
   const id = this.getFilter()._id.toString()
-  const profile = await ProfileComment.findOne({profileId:id})
-  if(profile){
-   let deleted = await ProfileComment.deleteOne({profileId:id})
-    console.log('trecut0', profile, deleted)
+  const profile = await ProfileComment.findOne({ profileId: id })
+  if (profile) {
+    try {
+      ProfileComment.updateMany(
+        {},
+        { $pull: { comments: { authorId: id } } }).then(function () {
+          const delProfileComm =  ProfileComment.deleteOne({ profileId: id })
+          return delProfileComm
+        })
+    } catch (error) {
+      console.log('predel eror', error)
+    }
+    //let deleted = await ProfileComment.deleteOne({profileId:id})
+
+    //console.log('trecut0', profile, deleted)
   }
   console.log('hello from label predelete one + id:', id)
 })
@@ -64,15 +75,15 @@ LabelSchema.pre('deleteOne', async function(){
 LabelSchema.post('save', async function () {
   const thisuserId = this.userId
   User.findOneAndUpdate({ _id: thisuserId }, { itemId: this._id })
-  .then(function () {
+    .then(function () {
       User.findOne({ _id: thisuserId })
-     // // .then(function (user) {
-     // //     console.log('klk', thisuserId)
-     // //     console.log('mere?', user)
-    //  // })
-  });
+      // // .then(function (user) {
+      // //     console.log('klk', thisuserId)
+      // //     console.log('mere?', user)
+      //  // })
+    });
 
-  
+
 })
 
 
