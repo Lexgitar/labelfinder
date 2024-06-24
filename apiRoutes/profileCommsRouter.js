@@ -2,7 +2,7 @@ const profileCommsRouter = require('express').Router();
 const profileCommsController = require('../controller/profileCommsController')
 const { userCheckforComms, userAndItemIdCheck, checkForCommDelete  } = require('../middleware/authMiddleware')
 //get one
-
+profileCommsRouter.get('/:id', profileCommsController.profileComment_getOne)
 //
 profileCommsRouter.post('/', userCheckforComms, profileCommsController.profileComment_post)
 //
