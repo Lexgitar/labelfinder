@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const User = require('./User')
+////const User = require('./User')
 const ProfileComment = require('./ProfileComments')
 
 const Schema = mongoose.Schema;
@@ -53,8 +53,8 @@ const LabelSchema = new Schema({
 //LabelSchema.pre('deleteOne',{ query: true, document: false }, async function(){
 LabelSchema.pre('deleteOne', async function () {
   const id = this.getFilter()._id.toString()
-  const profile = await ProfileComment.findOne({ profileId: id })
-  if (profile) {
+  // const profile = await ProfileComment.findOne({ profileId: id })
+  // if (profile) {
     try {
       ProfileComment.updateMany(
         {},
@@ -68,23 +68,23 @@ LabelSchema.pre('deleteOne', async function () {
     //let deleted = await ProfileComment.deleteOne({profileId:id})
 
     //console.log('trecut0', profile, deleted)
-  }
+  //}
   console.log('hello from label predelete one + id:', id)
 })
 
-LabelSchema.post('save', async function () {
-  const thisuserId = this.userId
-  User.findOneAndUpdate({ _id: thisuserId }, { itemId: this._id })
-    .then(function () {
-      User.findOne({ _id: thisuserId })
-      // // .then(function (user) {
-      // //     console.log('klk', thisuserId)
-      // //     console.log('mere?', user)
-      //  // })
-    });
+// LabelSchema.post('save', async function () {
+//   const thisuserId = this.userId
+//   User.findOneAndUpdate({ _id: thisuserId }, { itemId: this._id })
+//     .then(function () {
+//       User.findOne({ _id: thisuserId })
+//       // // .then(function (user) {
+//       // //     console.log('klk', thisuserId)
+//       // //     console.log('mere?', user)
+//       //  // })
+//     });
 
 
-})
+// })
 
 
 module.exports = mongoose.model('Label', LabelSchema);

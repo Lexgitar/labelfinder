@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Label = require('./Label');
 const Artist = require('./Artist')
-const User = require('./User')
+//const User = require('./User')
 const ProfileComment = require('./ProfileComments')
 
 
@@ -60,7 +60,7 @@ BandSchema.pre('deleteOne', async function (next) {
     const updateComm = await ProfileComment.updateMany(
       {},
       { $pull: { comments: { authorId: idClear } } })
-    const delProfileComm = await ProfileComment.deleteOne({ profileId: idClear })  
+    const delProfileComm = await ProfileComment.deleteOne({ profileId: idClear })
     const updated = await Label.updateMany({}, {
       $pull: { attachedId: { $in: [idClear] } }
     })
@@ -80,16 +80,16 @@ BandSchema.pre('deleteOne', async function (next) {
 
 })
 
-BandSchema.post('save', async function () {
-  const thisuserId = this.userId
-  User.findOneAndUpdate({ _id: thisuserId }, { itemId: this._id })
-    .then(function () {
-      User.findOne({ _id: thisuserId })
-      // // .then(function (user) {
-      // //     console.log('klk', thisuserId)
-      // //     console.log('mere?', user)
-      //  // })
-    });
+// BandSchema.post('save', async function () {
+//   const thisuserId = this.userId
+//   User.findOneAndUpdate({ _id: thisuserId }, { itemId: this._id })
+//     .then(function () {
+//       User.findOne({ _id: thisuserId })
+//       // // .then(function (user) {
+//       // //     console.log('klk', thisuserId)
+//       // //     console.log('mere?', user)
+//       //  // })
+//     });
 
   // BandSchema.post('deleteOne',{ query: true, document: false }, async function () {
   //   const id = this.getFilter()._id.toString()
@@ -107,7 +107,7 @@ BandSchema.post('save', async function () {
 
   // })
 
-})
+// })
 
 
 module.exports = mongoose.model('Band', BandSchema);

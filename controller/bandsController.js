@@ -1,6 +1,6 @@
 const Band = require('../models/Band')
 const { handleDocErrors } = require('../controller/authController')
-
+const User = require('../models/User')
 const bands_get = async (req, res, next) => {
     const bands = await Band.find()
     try {
@@ -111,6 +111,15 @@ const bands_post = async (req, res, next) => {
                 role
 
             })
+
+            User.findOneAndUpdate({ _id: newBand.userId }, { itemId: newBand._id })
+            .then(function () {
+                User.findOne({ _id: newBand.userId })
+                    .then(function (user) {
+                        
+                        console.log('mere band useritemid?', user)
+                    })
+            });
 
             res.send(newBand);
 

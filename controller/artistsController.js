@@ -117,7 +117,7 @@ const artists_post = async (req, res, next) => {
                     User.findOne({ _id: newArtist.userId })
                         .then(function (user) {
                             
-                            console.log('mere?', user)
+                            console.log('mere band useritemid?', user)
                         })
                 });
 

@@ -1,4 +1,5 @@
 const Label = require('../models/Label')
+const User = require('../models/User')
 const { handleDocErrors } = require('../controller/authController')
 
 const labels_get = async (req, res, next) => {
@@ -108,6 +109,15 @@ const labels_post = async (req, res, next) => {
                 links, 
                 role
             })
+
+            User.findOneAndUpdate({ _id: newLabel.userId }, { itemId: newLabel._id })
+            .then(function () {
+                User.findOne({ _id: newLabel.userId })
+                    .then(function (user) {
+                        
+                        console.log('mere label useritemid?', user)
+                    })
+            });
 
             res.send(newLabel);
 

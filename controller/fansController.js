@@ -1,6 +1,6 @@
 const Fan = require('../models/Fan')
 const { handleDocErrors } = require('../controller/authController')
-//const User = require('../models/User')
+const User = require('../models/User')
 const fans_get = async (req, res, next) => {
     const fans = await Fan.find()
     try {
@@ -108,11 +108,11 @@ const fans_post = async (req, res, next) => {
                 links
 
             })
-           // // User.findOneAndUpdate({ _id: newFan.userId }, { itemId: newFan._id })
-           // //     .then(function () {
-            ////        User.findOne({ _id: newFan.userId})
+           User.findOneAndUpdate({ _id: newFan.userId }, { itemId: newFan._id })
+               .then(function () {
+                   User.findOne({ _id: newFan.userId})
                         
-            ////     });
+                });
             res.send(newFan);
 
         } catch (err) {
