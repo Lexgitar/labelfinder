@@ -66,7 +66,7 @@ const profileComment_put = async (req, res, next) => {
     const comment = { _id: new ObjectId(), body, authorId:userItemId }
 
     try {
-        if (profileId, body && !deleteId && profileId !== userItemId) {
+        if (profileId, body && !deleteId ) {
             ProfileComment.updateOne({ profileId }, { $push: { comments: comment } }).then(function () {
                 ProfileComment.findOne({ profileId }).then(function (profileComment) {
                     console.log('clog pcput', profileId, body, userItemId)
