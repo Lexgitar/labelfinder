@@ -26,10 +26,11 @@ const profileComment_getByProfileId = async (req, res, next) => {
 }
 
 const profileComment_post = async (req, res, next) => {
-    const { body } = req.body;
+    console.log('post req: ' , req , req.body)
+    const { body } = req.body
     const profileId = req.query.id
     const userItemId = req.query.userItemId
-
+    console.log('body pcpost: ', body)
     const findItem = await ProfileComment.findOne({ profileId })
     if (!findItem && userItemId !== profileId) {
         try {
@@ -59,14 +60,15 @@ const profileComment_post = async (req, res, next) => {
 }
 
 const profileComment_put = async (req, res, next) => {
+    console.log('put req: ' , req , req.body)
     const profileId = req.params.id
-    const { body } = req.body
+    const  {body}  = req.body
     const deleteId = req.query.delete
-    const userItemId = req.query.userItemId
+    const {userItemId} = req.query
     const comment = { _id: new ObjectId(), body, authorId:userItemId }
-
+    console.log('pCput :', profileId, body, deleteId, userItemId)
     try {
-        if (profileId, body && !deleteId ) {
+        if (profileId && body && !deleteId ) {
             ProfileComment.updateOne({ profileId }, { $push: { comments: comment } }).then(function () {
                 ProfileComment.findOne({ profileId }).then(function (profileComment) {
                     console.log('clog pcput', profileId, body, userItemId)
