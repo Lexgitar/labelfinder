@@ -163,7 +163,7 @@ const checkForCommDelete = (req, res, next) => {
 
     const token = req.cookies.jwt
     const paramsId = req.params.id
-    const deleteId = req.query.delete
+    const {authorId} = req.query
 
     try {
         if (token) {
@@ -173,7 +173,7 @@ const checkForCommDelete = (req, res, next) => {
                 } else {
                    // //console.log(decodedToken)
                     let user = await User.findById(decodedToken.id)
-                    if ((user && user.itemId === paramsId) || (user && user.itemId === deleteId )) {
+                    if ((user.itemId === paramsId) || (user.itemId === authorId )) {
                        console.log('checkdel')
                         next()
                     }else{

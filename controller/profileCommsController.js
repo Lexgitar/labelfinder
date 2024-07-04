@@ -37,7 +37,7 @@ const profileComment_post = async (req, res, next) => {
             const newProfileComm = await ProfileComment.create({
                 profileId,
                 comments: { _id: new ObjectId(), body, authorId:userItemId },
-                _id: new ObjectId()
+               //// _id: new ObjectId()
 
 
             })
@@ -60,7 +60,7 @@ const profileComment_post = async (req, res, next) => {
 }
 
 const profileComment_put = async (req, res, next) => {
-    console.log('put req: ' , req , req.body)
+    
     const profileId = req.params.id
     const  {body}  = req.body
     const deleteId = req.query.delete
@@ -111,12 +111,14 @@ const profileComment_delete = async (req, res, next) => {
 const comment_delete = async (req, res, next) => {
     const profileId = req.params.id
     const deleteId = req.query.delete
+    
 
     console.log('whattt')
+    console.log('req query', req.query)
 
     try {
         if (deleteId) {
-            ProfileComment.updateOne({ profileId }, { $pull: { comments: { authorId: deleteId } } }).then(function () {
+            ProfileComment.updateOne({ profileId }, { $pull: { comments: { _id: new ObjectId(deleteId) } } }).then(function () {
                 ProfileComment.findOne({ profileId }).then(function (profileComment) {
                     console.log('1com del', profileComment)
 
