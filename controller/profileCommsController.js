@@ -1,15 +1,16 @@
 const ProfileComment = require('../models/ProfileComments')
 
+
 var ObjectId = require('mongodb').ObjectId;
 const { handleDocErrors } = require('../controller/authController')
 
 const profileComment_getOne = async (req, res, next) => {
-    const {id} = req.params
-    const onePrComm = await ProfileComment.findOne({profileId: id })
+    const { id } = req.params
+    const onePrComm = await ProfileComment.findOne({ profileId: id })
     try {
         if (onePrComm) {
             res.send(onePrComm)
-        } else{
+        } else {
             res.send('no comments')
         }
     } catch (error) {
@@ -28,7 +29,7 @@ const profileComment_getByProfileId = async (req, res, next) => {
 }
 
 const profileComment_post = async (req, res, next) => {
-    console.log('post req: ' , req , req.body)
+    console.log('post req: ', req, req.body)
     const { body } = req.body
     const profileId = req.query.id
     const userItemId = req.query.userItemId
@@ -38,8 +39,14 @@ const profileComment_post = async (req, res, next) => {
         try {
             const newProfileComm = await ProfileComment.create({
                 profileId,
-                comments: { _id: new ObjectId(), body, authorId:userItemId },
-               //// _id: new ObjectId()
+                comments: {
+                    _id: new ObjectId(),
+                    body,
+                    authorId: userItemId,
+                    createdAt: new Date(Date.now()),
+                    updatedAt: new Date(Date.now()),
+                },
+                //// _id: new ObjectId()
 
 
             })
@@ -62,15 +69,21 @@ const profileComment_post = async (req, res, next) => {
 }
 
 const profileComment_put = async (req, res, next) => {
-    
+
     const profileId = req.params.id
-    const  {body}  = req.body
+    const { body } = req.body
     const deleteId = req.query.delete
-    const {userItemId} = req.query
-    const comment = { _id: new ObjectId(), body, authorId:userItemId }
+    const { userItemId } = req.query
+    const comment = {
+        _id: new ObjectId(),
+        body,
+        authorId: userItemId,
+        createdAt: new Date(Date.now()),
+        updatedAt: new Date(Date.now()),
+    }
     console.log('pCput :', profileId, body, deleteId, userItemId)
     try {
-        if (profileId && body && !deleteId ) {
+        if (profileId && body && !deleteId) {
             ProfileComment.updateOne({ profileId }, { $push: { comments: comment } }).then(function () {
                 ProfileComment.findOne({ profileId }).then(function (profileComment) {
                     console.log('clog pcput', profileId, body, userItemId)
@@ -113,7 +126,7 @@ const profileComment_delete = async (req, res, next) => {
 const comment_delete = async (req, res, next) => {
     const profileId = req.params.id
     const deleteId = req.query.delete
-    
+
 
     console.log('whattt')
     console.log('req query', req.query)
