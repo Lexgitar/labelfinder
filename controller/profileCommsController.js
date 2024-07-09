@@ -9,6 +9,8 @@ const profileComment_getOne = async (req, res, next) => {
     try {
         if (onePrComm) {
             res.send(onePrComm)
+        } else{
+            res.send('no comments')
         }
     } catch (error) {
         res.status(400).json(error.message)
