@@ -1,7 +1,7 @@
 
 
 const corsOptions = {
-    origin: ['https://labelfinder-xmhe.onrender.com'] ,
+    origin: ['https://bandnott.com/'] ,
     credentials: true,
     optionsSuccessStatus: 200
 }
