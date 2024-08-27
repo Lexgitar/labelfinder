@@ -1,6 +1,8 @@
 const express = require('express');
 require('dotenv').config();
 const cookieParser = require ('cookie-parser');
+const cors = require ('cors')
+const corsOptions = require ('./config/corsOptions')
 //
 const mongoose = require('mongoose');
 const app = express();
@@ -9,6 +11,8 @@ const dbURI = process.env.DB_URI;
 const apiRouter = require ('./apiRoutes/apiRouter');
 
 const PORT = 3000;
+//
+app.use(cors(corsOptions))
 //
 app.use(express.json());
 app.use(cookieParser());
