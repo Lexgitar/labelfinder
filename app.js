@@ -30,7 +30,7 @@ const dbURI = process.env.DB_URI;
 //
 const apiRouter = require ('./apiRoutes/apiRouter');
 
-const PORT = 3000;
+const PORT = 3000 || 5000;
 //
 app.use(cors(corsOptions))
 //
