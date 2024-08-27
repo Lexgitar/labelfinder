@@ -72,7 +72,14 @@ const signup_post = async (req, res) => {
   try {
     const user = await User.create({ email, password, role });
     const token = createToken(user._id);
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
+    res.cookie('jwt', token, { 
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      domain: 'labelfinder-xmhe.onrender.com',
+      maxAge: maxAge * 1000 
+    
+    })
     res.status(200).json({ email, role })
   }
   catch (err) {
