@@ -115,7 +115,9 @@ const login_post = async (req, res) => {
 }
 //
 const logout_get = (req, res) => {
+  console.log(res.cookie)
   res.cookie('jwt', '', { maxAge: 1 });
+  
   res.send('OUT');
   // res.redirect('/');
 }
