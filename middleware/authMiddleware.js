@@ -16,7 +16,7 @@ const requireAuth = (req, res, next) => {
         jwt.verify(token, jwtSecret, (err, decodedToken) => {
             if (err) {
                 console.log(err.message)
-                res.send('require auth - error')
+                res.send('require auth - error1', err)
             } else {
                 console.log(decodedToken)
 
@@ -24,7 +24,7 @@ const requireAuth = (req, res, next) => {
             }
         })
     } else {
-        res.send('require auth - error')
+        res.send('require auth - error2')
     }
 }
 
