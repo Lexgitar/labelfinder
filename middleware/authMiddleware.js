@@ -19,7 +19,7 @@ const requireAuth = (req, res, next) => {
                 // res.send('require auth - error1', err)
                 res.status(202).send('require auth - error1', err)
             } else {
-                console.log(decodedToken)
+                console.log('decoded ', decodedToken)
 
                 next()
             }
@@ -27,8 +27,8 @@ const requireAuth = (req, res, next) => {
     } else {
         // res.send('require auth - error2', token)
         res.status(500).send('require auth - error2 n tkn'+ token + req)
-        console.log('require auth - error2 n tkn'+ token)
-        console.log('require auth - error2 n cuk'+ req)
+        console.log('require auth - error2 n tkn '+ token)
+        console.log('require auth - error2 n cuk '+ req.cookies)
     }
 }
 
