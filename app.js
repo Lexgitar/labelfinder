@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
-const cookieParser = require ('cookie-parser');
-const cors = require ('cors')
+const cookieParser = require('cookie-parser');
+const cors = require('cors')
 //const corsOptions = require ('./config/corsOptions')
 //
 
@@ -10,10 +10,10 @@ const allowedOrigins = [
 ]
 
 const corsOptions = {
-  
-      origin: 'https://bandnott.com',
+
+  origin: 'https://bandnott.com',
   credentials: true,
-  vary: 'origin',
+  vary: 'Origin',
   optionsSuccessStatus: 200
 }
 
@@ -23,17 +23,17 @@ const mongoose = require('mongoose');
 const app = express();
 const dbURI = process.env.DB_URI;
 //
-const apiRouter = require ('./apiRoutes/apiRouter');
+const apiRouter = require('./apiRoutes/apiRouter');
 
 const PORT = 3000 || 5000;
 //
 // app.use(cors(corsOptions))
 app.use(cors(
   {
-    origin: "https://bandnott.com/", 
+    origin: "https://bandnott.com/",
     credentials: true,
-    Vary:'Origin'
-}
+    Vary: 'Origin'
+  }
 ))
 //
 app.use(express.json());
@@ -44,9 +44,9 @@ app.use('/api', apiRouter);
 //     console.log('alex listening on ', PORT);
 // });
 mongoose.connect(dbURI)
-  .then((result) => app.listen(PORT, ()=>{
+  .then((result) => app.listen(PORT, () => {
     console.log('@ listening');
   }))
   .catch((err) => console.log('@ error', err));
 
-  //console.log(dbURI);
+//console.log(dbURI);
