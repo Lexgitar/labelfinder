@@ -13,7 +13,7 @@ const corsOptions = {
 
   origin: 'https://bandnott.com',
   credentials: true,
-  vary: 'Origin',
+  Vary: 'Origin',
   optionsSuccessStatus: 200
 }
 
