@@ -28,7 +28,13 @@ const apiRouter = require ('./apiRoutes/apiRouter');
 const PORT = 3000 || 5000;
 //
 // app.use(cors(corsOptions))
-app.use(cors())
+app.use(cors(
+  {
+    origin: "https://bandnott.com/", 
+    credentials: true,
+    Vary:'Origin'
+}
+))
 //
 app.use(express.json());
 app.use(cookieParser());
