@@ -11,7 +11,7 @@ const allowedOrigins = [
 
 const corsOptions = {
 
-  origin: 'https://bandnott.com',
+  origin: 'https://bandnott.com/',
   credentials: true,
   Vary: 'Origin',
   optionsSuccessStatus: 200
