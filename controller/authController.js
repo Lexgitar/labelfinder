@@ -72,13 +72,13 @@ const signup_post = async (req, res) => {
   try {
     const user = await User.create({ email, password, role });
     const token = createToken(user._id);
-    res.cookie('jwt', token, { 
+    res.cookie('jwt', token, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
       domain: 'labelfinder-xmhe.onrender.com',
-      maxAge: maxAge * 1000 
-    
+      maxAge: maxAge * 1000
+
     })
     res.status(200).json({ email, role })
   }
@@ -105,7 +105,14 @@ const login_post = async (req, res) => {
     //   maxAge: maxAge * 1000 
 
     // })
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.cookie('jwt', token,
+      {
+        httpOnly: true,
+        secure: true,
+        httpOnly: true,
+        sameSite: 'none',
+        maxAge: maxAge * 1000
+      });
     res.status(200).json({ email: user.email, _id: user._id, role: user.role, itemId: user.itemId })
   } catch (error) {
     console.log('login', error)
@@ -117,7 +124,7 @@ const login_post = async (req, res) => {
 const logout_get = (req, res) => {
   console.log('rescookie', res.cookie('jwt'))
   res.cookie('jwt', '', { maxAge: 1 });
-  
+
   res.send('OUT');
   // res.redirect('/');
 }
@@ -127,7 +134,7 @@ const user_delete = async (req, res, next) => {
   console.log('req.id', req.query.id)
   const id = req.query.id
   const role = req.query.role
-  const deletePayload = await User.deleteOne({ _id: id , role: role })
+  const deletePayload = await User.deleteOne({ _id: id, role: role })
   try {
     if (deletePayload.deletedCount === 1) {
       res.cookie('jwt', '', { maxAge: 1 });
