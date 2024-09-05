@@ -28,7 +28,7 @@ const requireAuth = (req, res, next) => {
             })
         } else {
             // res.send('require auth - error2', token)
-            res.status(500).send('require auth - error2 n tkn' + token + req)
+            res.send('require auth eor- error2 n tkn' + token + req)
             console.log('require auth - error2 n tkn ' + token)
             console.log('require auth - error2 n cuk ' + req.cookies)
         }
