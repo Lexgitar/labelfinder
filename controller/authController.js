@@ -56,6 +56,7 @@ const handleDocErrors = (err) => {
 
 //
 const maxAge = 3 * 24 * 60 * 60;
+
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: maxAge
@@ -68,10 +69,13 @@ const createToken = (id) => {
 // };
 //
 const signup_post = async (req, res) => {
+
   const { email, password, role } = req.body;
   try {
+
     const user = await User.create({ email, password, role });
     const token = createToken(user._id);
+
     res.cookie('jwt', token, {
       httpOnly: true,
       secure: true,
@@ -89,7 +93,10 @@ const signup_post = async (req, res) => {
     console.log('alx', errors)
   }
 }
-//
+
+
+
+// Login  - post req
 const login_post = async (req, res) => {
   const { email, password } = req.body;
 
@@ -128,6 +135,10 @@ const login_post = async (req, res) => {
     res.status(400).json({ errors })
   }
 }
+
+
+
+
 //
 const logout_get = (req, res) => {
   console.log('rescookie', res.cookie('jwt'))
