@@ -19,7 +19,7 @@ const requireAuth = (req, res, next) => {
                 if (err) {
                     console.log(err.message)
                     // res.send('require auth - error1', err)
-                    res.send('require auth - error1', err)
+                    res.send('1require auth - error1', err)
                 } else {
                     console.log('decoded ', decodedToken)
 
@@ -28,14 +28,14 @@ const requireAuth = (req, res, next) => {
             })
         } else {
             // res.send('require auth - error2', token)
-            res.send('require auth eor- error2 n tkn' + token + req)
-            console.log('require auth - error2 n tkn ' + token)
-            console.log('require auth - error2 n cuk ' + req.cookies)
+            res.send('2require auth eor- error2 n tkn' + token + req)
+            console.log('2require auth - error2 n tkn ' + token)
+            console.log('2require auth - error2 n cuk ' + req.cookies)
         }
 
     } catch (error) {
-        console.log('token eror', error)
-        res.send('require auth - error2 n tkn', error)
+        console.log('5token eror', error)
+        res.send('5require auth - error2 n tkn', error)
     }
    
 
