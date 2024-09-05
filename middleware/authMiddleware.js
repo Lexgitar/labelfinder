@@ -12,6 +12,30 @@ const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt;
 
     //check if token / valid
+    try {
+        if (token) {
+            jwt.verify(token, jwtSecret, (err, decodedToken) => {
+                if (err) {
+                    console.log(err.message)
+                    // res.send('require auth - error1', err)
+                    res.status(202).send('require auth - error1', err)
+                } else {
+                    console.log('decoded ', decodedToken)
+
+                    next()
+                }
+            })
+        } else {
+            // res.send('require auth - error2', token)
+            res.status(500).send('require auth - error2 n tkn' + token + req)
+            console.log('require auth - error2 n tkn ' + token)
+            console.log('require auth - error2 n cuk ' + req.cookies)
+        }
+
+    } catch (error) {
+        console.log('token eror', error)
+    }
+
     if (token) {
         jwt.verify(token, jwtSecret, (err, decodedToken) => {
             if (err) {
@@ -26,9 +50,9 @@ const requireAuth = (req, res, next) => {
         })
     } else {
         // res.send('require auth - error2', token)
-        res.status(500).send('require auth - error2 n tkn'+ token + req)
-        console.log('require auth - error2 n tkn '+ token)
-        console.log('require auth - error2 n cuk '+ req.cookies)
+        res.status(500).send('require auth - error2 n tkn' + token + req)
+        console.log('require auth - error2 n tkn ' + token)
+        console.log('require auth - error2 n cuk ' + req.cookies)
     }
 }
 
@@ -119,7 +143,7 @@ const userCheckforComms = (req, res, next) => {
                     console.log(decodedToken)
                     let user = await User.findById(decodedToken.id)
                     if (user) {
-                       req.query.userItemId = user.itemId
+                        req.query.userItemId = user.itemId
                         next()
                     }
                 }
@@ -145,10 +169,10 @@ const userAndItemIdCheck = (req, res, next) => {
                 if (err) {
                     throw new Error(err.message)
                 } else {
-                   // //console.log(decodedToken)
+                    // //console.log(decodedToken)
                     let user = await User.findById(decodedToken.id)
                     if (user && user.itemId === paramsId) {
-                       
+
                         next()
                     }
                 }
@@ -167,7 +191,7 @@ const checkForCommDelete = (req, res, next) => {
 
     const token = req.cookies.jwt
     const paramsId = req.params.id
-    const {authorId} = req.query
+    const { authorId } = req.query
 
     try {
         if (token) {
@@ -175,17 +199,17 @@ const checkForCommDelete = (req, res, next) => {
                 if (err) {
                     throw new Error(err.message)
                 } else {
-                   // //console.log(decodedToken)
+                    // //console.log(decodedToken)
                     let user = await User.findById(decodedToken.id)
-                    if ((user.itemId === paramsId) || (user.itemId === authorId )) {
-                       console.log('checkdel')
+                    if ((user.itemId === paramsId) || (user.itemId === authorId)) {
+                        console.log('checkdel')
                         next()
-                    }else{
+                    } else {
                         throw new Error('cannot delete comm')
                     }
                 }
 
-                
+
 
             })
         }
@@ -285,10 +309,10 @@ module.exports = {
     requireAuthNRole,
     validateId,
     userCheck,
-    clearSubmitArray, 
+    clearSubmitArray,
     userCheckforComms,
     userAndItemIdCheck,
     checkForCommDelete,
-    
+
 
 };
