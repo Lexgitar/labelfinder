@@ -29,7 +29,8 @@ const apiRouter = require('./apiRoutes/apiRouter');
 const PORT = 3000 || 5000;
 //
 // app.use(cors(corsOptions))
-app.options('*', cors(
+
+app.use(cors(
   {
     origin: "https://bandnott.com",
     credentials: true,
@@ -37,7 +38,8 @@ app.options('*', cors(
     optionsSuccessStatus: 200
   }
 ))
-app.use(cors(
+
+app.options('*', cors(
   {
     origin: "https://bandnott.com",
     credentials: true,
