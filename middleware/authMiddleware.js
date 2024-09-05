@@ -19,7 +19,7 @@ const requireAuth = (req, res, next) => {
                 if (err) {
                     console.log(err.message)
                     // res.send('require auth - error1', err)
-                    res.status(202).send('require auth - error1', err)
+                    res.send('require auth - error1', err)
                 } else {
                     console.log('decoded ', decodedToken)
 
