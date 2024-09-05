@@ -12,7 +12,7 @@ const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt;
 
     //check if token / valid
-    
+
     try {
         if (token) {
             jwt.verify(token, jwtSecret, (err, decodedToken) => {
@@ -35,7 +35,7 @@ const requireAuth = (req, res, next) => {
 
     } catch (error) {
         console.log('token eror', error)
-        res.status(500).send('require auth - error2 n tkn', error)
+        res.send('require auth - error2 n tkn', error)
     }
    
 
