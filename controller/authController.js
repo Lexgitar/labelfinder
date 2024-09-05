@@ -121,7 +121,7 @@ const login_post = async (req, res) => {
         sameSite: 'none',
         domain: 'labelfinder-xmhe.onrender.com',
         maxAge: maxAge * 1000,
-        Partitioned:true
+        partitioned:true
       });
 
     res.status(200).json({
