@@ -31,8 +31,8 @@ const PORT = 3000 || 5000;
 // app.use(cors(corsOptions))
 app.use(cors(
   {
-    'Access-Control-Allow-Origin': "https://bandnott.com",
-    //credentials: true,
+    origin: "https://bandnott.com",
+    credentials: true,
     Vary: 'Origin',
     optionsSuccessStatus: 200
   }

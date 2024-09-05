@@ -12,32 +12,33 @@ const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt;
 
     //check if token / valid
-    // try {
-    //     if (token) {
-    //         jwt.verify(token, jwtSecret, (err, decodedToken) => {
-    //             if (err) {
-    //                 console.log(err.message)
-    //                 // res.send('require auth - error1', err)
-    //                 res.status(202).send('require auth - error1', err)
-    //             } else {
-    //                 console.log('decoded ', decodedToken)
-
-    //                 next()
-    //             }
-    //         })
-    //     } else {
-    //         // res.send('require auth - error2', token)
-    //         res.status(500).send('require auth - error2 n tkn' + token + req)
-    //         console.log('require auth - error2 n tkn ' + token)
-    //         console.log('require auth - error2 n cuk ' + req.cookies)
-    //     }
-
-    // } catch (error) {
-    //     console.log('token eror', error)
-    //     res.status(500).send('require auth - error2 n tkn', error)
-    // }
-next()
     
+    try {
+        if (token) {
+            jwt.verify(token, jwtSecret, (err, decodedToken) => {
+                if (err) {
+                    console.log(err.message)
+                    // res.send('require auth - error1', err)
+                    res.status(202).send('require auth - error1', err)
+                } else {
+                    console.log('decoded ', decodedToken)
+
+                    next()
+                }
+            })
+        } else {
+            // res.send('require auth - error2', token)
+            res.status(500).send('require auth - error2 n tkn' + token + req)
+            console.log('require auth - error2 n tkn ' + token)
+            console.log('require auth - error2 n cuk ' + req.cookies)
+        }
+
+    } catch (error) {
+        console.log('token eror', error)
+        res.status(500).send('require auth - error2 n tkn', error)
+    }
+   
+
 }
 
 const requireAuthNRole = (req, res, next) => {
@@ -214,7 +215,7 @@ const checkAuthAndRole = (req, res, next) => {
                 console.log(err.message)
                 res.send(err.message)
 
-            } else {
+    } else {
                 console.log(decodedToken)
                 let user = await User.findById(decodedToken.id)
                 console.log(user.role);
