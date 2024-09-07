@@ -123,7 +123,7 @@ const login_post = async (req, res) => {
         maxAge: maxAge * 1000,
         partitioned:true
       });
-       res.headers['Access-Control-Max-Age'] = '600'
+       
 
     res.status(200).json({
       email: user.email,
