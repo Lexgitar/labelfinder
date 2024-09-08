@@ -32,7 +32,7 @@ const PORT = 3000 || 5000;
 
 app.use(cors(
   {
-    origin: "https://bandnott.com",
+    origin: ["https://bandnott.com", 'http://localhost:3001'],
      credentials: true,
     Vary: 'Origin',
     optionsSuccessStatus: 200
