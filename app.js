@@ -35,7 +35,7 @@ const PORT = 3000 || 5000;
 app.options('*', cors(
   {
     origin: "https://bandnott.com",
-    credentials: true,
+    // credentials: true,
     Vary: 'Origin',
     optionsSuccessStatus: 200
   }
@@ -44,7 +44,7 @@ app.options('*', cors(
 app.use(cors(
   {
     origin: "https://bandnott.com",
-    credentials: true,
+    // credentials: true,
     Vary: 'Origin',
     optionsSuccessStatus: 200
   }
