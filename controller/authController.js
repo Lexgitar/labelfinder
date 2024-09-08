@@ -119,7 +119,8 @@ const login_post = async (req, res) => {
         httpOnly: true,
         path: '/',
         sameSite: 'none',
-        domain: 'labelfinder-xmhe.onrender.com',
+        //domain: 'labelfinder-xmhe.onrender.com',
+        domain: 'bandnotts.com',
         maxAge: maxAge * 1000,
         partitioned:true,
         preflightContinue: true
