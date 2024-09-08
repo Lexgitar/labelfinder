@@ -117,18 +117,17 @@ const login_post = async (req, res) => {
         httpOnly: true,
         sameSite: 'none',
         secure: true,
-        httpOnly: true,
         path: '/',
         //domain: 'labelfinder-xmhe.onrender.com',
         domain: 'bandnotts.com',
         maxAge: maxAge * 1000,
-        partitioned:true,
+        partitioned: true,
         // signed: true,
         preflightContinue: true
       });
 
 
-       
+
 
     res.status(200).json({
       email: user.email,
@@ -150,9 +149,12 @@ const login_post = async (req, res) => {
 const logout_get = (req, res) => {
   console.log('rescookie', res.cookie('jwt'))
   res.cookie('jwt', '', {
+    httpOnly: true,
     sameSite: 'none',
-    partitioned:true,
-    maxAge: 1 });
+    secure: true,
+    partitioned: true,
+    maxAge: 1
+  });
 
   res.send('OUT');
   // res.redirect('/');
