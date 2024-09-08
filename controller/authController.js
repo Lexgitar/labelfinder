@@ -115,16 +115,18 @@ const login_post = async (req, res) => {
     res.cookie('jwt', token,
       {
         httpOnly: true,
+        sameSite: 'none',
         secure: true,
         httpOnly: true,
         path: '/',
-        sameSite: 'none',
         //domain: 'labelfinder-xmhe.onrender.com',
         domain: 'bandnotts.com',
         maxAge: maxAge * 1000,
         partitioned:true,
         preflightContinue: true
       });
+
+
        
 
     res.status(200).json({
