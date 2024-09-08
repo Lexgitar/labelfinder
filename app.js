@@ -30,25 +30,25 @@ const PORT = 3000 || 5000;
 //
 // app.use(cors(corsOptions))
 
-
-
-app.options('*', cors(
-  {
-    origin: "https://bandnott.com",
-    // credentials: true,
-    Vary: 'Origin',
-    optionsSuccessStatus: 200
-  }
-))
-
 app.use(cors(
   {
     origin: "https://bandnott.com",
-    // credentials: true,
+     credentials: true,
     Vary: 'Origin',
     optionsSuccessStatus: 200
   }
 ))
+
+// app.options('*', cors(
+//   {
+//     origin: "https://bandnott.com",
+//      credentials: true,
+//     Vary: 'Origin',
+//     optionsSuccessStatus: 200
+//   }
+// ))
+
+
 //
 app.use(express.json());
 app.use(cookieParser());
