@@ -123,7 +123,7 @@ const login_post = async (req, res) => {
         domain: 'bandnotts.com',
         maxAge: maxAge * 1000,
         partitioned:true,
-        signed: true,
+        // signed: true,
         preflightContinue: true
       });
 
