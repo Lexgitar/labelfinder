@@ -77,11 +77,21 @@ const signup_post = async (req, res) => {
     const token = createToken(user._id);
 
     res.cookie('jwt', token, {
+      // httpOnly: true,
+      // secure: true,
+      // sameSite: 'none',
+      // domain: 'labelfinder-xmhe.onrender.com',
+      // maxAge: maxAge * 1000
       httpOnly: true,
-      secure: true,
       sameSite: 'none',
-      domain: 'labelfinder-xmhe.onrender.com',
-      maxAge: maxAge * 1000
+      secure: true,
+      path: '/',
+      //domain: 'labelfinder-xmhe.onrender.com',
+      domain: 'bandnotts.com',
+      maxAge: maxAge * 1000,
+      partitioned: true,
+      // signed: true,
+      preflightContinue: true
 
     })
     res.status(200).json({ email, role })
