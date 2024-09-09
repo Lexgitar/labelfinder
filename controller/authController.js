@@ -157,7 +157,8 @@ const login_post = async (req, res) => {
 
 //
 const logout_get = (req, res) => {
-  console.log('rescookie', res.cookie('jwt'))
+  console.log('rescookie')
+
   res.cookie('jwt', '', {
     httpOnly: true,
     sameSite: 'none',
