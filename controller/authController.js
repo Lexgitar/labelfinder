@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 //
 // handle errors
 const handleErrors = (err) => {
-  console.log(err.message, err.code);
-  console.log('@err', err, Object.values(err), err.code)
+ // console.log(err.message, err.code);
+ // console.log('@err', err, Object.values(err), err.code)
   //let errors = { email: '', password: '' };
   let errors = '';
   let errString = ' incorrect credentials'
@@ -41,7 +41,7 @@ const handleErrors = (err) => {
 //DOC (fan, label, band) errors
 const handleDocErrors = (err) => {
 
-  console.log('@err', err, Object.values(err.message), err.code)
+  //console.log('@err', err, Object.values(err.message), err.code)
 
   if (err.code === 11000) {
     errors = 'duplicate item';
@@ -100,7 +100,7 @@ const signup_post = async (req, res) => {
     const errors = handleErrors(err);
     res.status(400).json({ errors });
 
-    console.log('alx', errors)
+   // console.log('alx', errors)
   }
 }
 
@@ -114,14 +114,7 @@ const login_post = async (req, res) => {
     const user = await User.login(email, password);
     const token = createToken(user._id);
 
-    // res.cookie('jwt', token, { 
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: 'none',
-    //   domain: 'labelfinder-xmhe.onrender.com',
-    //   maxAge: maxAge * 1000 
-
-    // })
+    
     res.cookie('jwt', token,
       {
         httpOnly: true,
@@ -146,7 +139,7 @@ const login_post = async (req, res) => {
       itemId: user.itemId
     })
   } catch (error) {
-    console.log('login', error)
+    //console.log('login', error)
     const errors = handleErrors(error)
     res.status(400).json({ errors })
   }
@@ -157,7 +150,7 @@ const login_post = async (req, res) => {
 
 //
 const logout_get = (req, res) => {
-  console.log('rescookie')
+  //console.log('rescookie')
 
   res.cookie('jwt', '', {
     httpOnly: true,
@@ -173,7 +166,7 @@ const logout_get = (req, res) => {
 //
 
 const user_delete = async (req, res, next) => {
-  console.log('req.id', req.query.id)
+  //console.log('req.id', req.query.id)
   const id = req.query.id
   const role = req.query.role
   const deletePayload = await User.deleteOne({ _id: id, role: role })
