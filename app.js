@@ -30,14 +30,26 @@ const PORT = 3000 || 5000;
 //
 // app.use(cors(corsOptions))
 
-app.use(cors(
-  {
-    origin: ["https://bandnott.com", 'http://localhost:3001'],
-     credentials: true,
-    Vary: 'Origin',
-    optionsSuccessStatus: 200
-  }
-))
+// app.use(cors(
+//   {
+//     origin: ["https://bandnott.com", 'http://localhost:3001'],
+//      credentials: true,
+//     Vary: 'Origin',
+//     optionsSuccessStatus: 200
+//   }
+// ))
+app.use(cors({
+  origin: [
+    'https://bandnott.com',
+    'https://www.bandnott.com',
+    'http://localhost:3000',
+    'http://localhost:3001'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 
 // app.options('*', cors(
 //   {
